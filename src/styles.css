@@ -1,0 +1,8 @@
+@font-face {
+  font-family: RalewayDots;
+  src: url(./assets/RalewayDots-Regular.ttf);
+}
+
+div {
+  font-family: RalewayDots;
+}
