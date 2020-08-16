@@ -8,7 +8,7 @@ const config = {
   height: 1500,
   backgroundColor: "#000c1f",
   parent: "game",
-  scene: Scene2,
+  scene: MainScene,
   physics: {
     default: "matter",
     matter: {
