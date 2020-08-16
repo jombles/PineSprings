@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Richard from "./characters/npcs/Richard";
+import { handleCollision } from "./dialog";
 const world = require("./assets/world.json");
 const backC = require("./assets/outside-coffee-shop.jpg");
 const frontC = require("./assets/outside-coffee-shop-full-front.png");
@@ -208,37 +209,7 @@ export default class MainScene extends Phaser.Scene {
       this.guy.setVelocityX(0);
     }
 
-    const character = {
-      getName: () => "Guy"
-    };
-
-    const onCollideCallback = () => {
-      this.dialog = this.rich.createDialogue(
-        this,
-        this.rich.getDefaultDialogue(character)
-      );
-    };
-
-    let checked = false;
-    const processCallback = () => {
-      checked = true;
-      return !this.dialog && !this.dialogDismissed;
-    };
-
-    this.matter.overlap(
-      this.characters.richard,
-      [this.guy],
-      onCollideCallback,
-      processCallback
-    );
-
-    if (!checked) {
-      if (this.dialog) {
-        this.dialog.fadeOutDestroy(100);
-        this.dialog = undefined;
-      }
-      this.dialogDismissed = false;
-    }
+    handleCollision(this, this.rich);
   }
 
   checkScale() {
