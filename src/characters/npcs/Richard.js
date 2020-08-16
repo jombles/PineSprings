@@ -1,4 +1,5 @@
 import Character from "../Character";
+import { dismissDialog } from '../../dialog'
 
 export default class Richard extends Character {
   constructor(scene) {
@@ -28,8 +29,21 @@ export default class Richard extends Character {
     this.sprite.anims.play("chill", true);
   }
 
-  getDefaultDialogue(character) {
+  getCurrentDialogue(scene) {
+		// TODO: make this dialogue dependent on game state.
+		const dialogue = this.getDefaultDialogue()
+		return this.createDialogue(scene, dialogue, ["Okay..."], (type, index, text) => {
+			if (text === '...') {
+				dismissDialog(scene);
+			} else if (type === "actions" && index === 0) {
+				scene.dialog.getElement('content').setText('What are you still doing here?');
+				scene.dialog.getElement('actions')[0].setText('...');
+			}
+		}
+	);
+  }
+
+  getDefaultDialogue() {
     return "God has forsaken us.";
-    //return "Why hello there, " + character.getName();
   }
 }

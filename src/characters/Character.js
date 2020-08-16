@@ -9,24 +9,16 @@ export default class Character {
     return this.name;
   }
 
-  createDialogue(scene, content) {
+  createDialogue(scene, content, actions, onClick) {
     return createDialog(scene, {
       content,
       title: this.getName(),
-      actions: ["Okay..."],
-      onClick: (type, index) => {
-        if (type === "actions" && index === 0) {
-          dismissDialog(scene);
-        }
-      }
+      actions,
+      onClick,
     });
   }
 
-  getDialogue(character) {
-    return this.getDefaultDialogue(character);
-  }
-
-  getDefaultDialogue(character) {
+  getDefaultDialogue() {
     throw new Error("Must implement getDefaultDialogue");
   }
 }
