@@ -1,14 +1,14 @@
 import Phaser from "phaser";
 //import Richard from "./characters/npcs/Richard";
-const world = require("./assets/world.json");
-const backC = require("./assets/inn.jpg");
+const world = require("../assets/world.json");
+const backC = require("../assets/inn.jpg");
 //const frontC = require("./assets/outside-coffee-shop-full-front.png");
 //const leftC = require("./assets/outside-coffee-shop-left-rail.png");
 //const rightC = require("./assets/outside-coffee-shop-right-rail.png");
-const guyImg = require("./assets/main-guy-large.png");
-const richardImg = require("./assets/richard-large.png");
-const lofi1 = require("./assets/music/longform001.mp3");
-const mute = require("./assets/mute-icon-white.png");
+const guyImg = require("../assets/main-guy-large.png");
+const richardImg = require("../assets/richard-large.png");
+const lofi1 = require("../assets/music/longform001.mp3");
+const mute = require("../assets/mute-icon-white.png");
 //const lofi2 = require("./assets/music/longform002.mp3");
 //const lofi3 = require("./assets/music/longform003.mp3");
 //const lofi4 = require("./assets/music/longform004.mp3");
@@ -22,17 +22,15 @@ const speedScale = 2.6;
 
 var music;
 
-export default class Scene2 extends Phaser.Scene {
+export default class Hotel extends Phaser.Scene {
+  constructor(handle) {
+    super(handle);
+  }
+
   preload() {
     this.dialog = false;
     this.guy = null;
     this.characters = {};
-    this.cursors = this.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.W,
-      down: Phaser.Input.Keyboard.KeyCodes.S,
-      left: Phaser.Input.Keyboard.KeyCodes.A,
-      right: Phaser.Input.Keyboard.KeyCodes.D
-    });
     this.load.image("back", backC);
     this.load.image("mute", mute);
     this.back = null;
@@ -123,7 +121,7 @@ export default class Scene2 extends Phaser.Scene {
     this.children.bringToTop(this.mute);
   }
 
-  update() {
+  sceneUpdate(input) {
     this.guy.setRotation(0);
     var scaleVal = this.guy.y - minY;
     var scaleRatio = baseScale + (scaleVal / diffY) * scalingDif * textureScale;
@@ -132,40 +130,40 @@ export default class Scene2 extends Phaser.Scene {
     } else {
       this.guy.setScale(scaleRatio, scaleRatio);
     }
-    if (this.cursors.left.isDown) {
+    if (input.left.isDown) {
       this.guy.anims.play("walk", true);
       this.guy.setVelocityX(-((this.guy.y * speedScale - 1.6) / minY));
 
-      if (!this.cursors.right.isDown) {
+      if (!input.right.isDown) {
         this.guy.flipX = true;
         //this.guy.setScale(-this.guy.scale., this.guy.scale);
       }
     }
-    if (this.cursors.right.isDown) {
+    if (input.right.isDown) {
       this.guy.anims.play("walk", true);
       this.guy.setVelocityX((this.guy.y * speedScale - 1.6) / minY);
 
-      if (!this.cursors.left.isDown) {
+      if (!input.left.isDown) {
         this.guy.flipX = false;
       }
     }
-    if (this.cursors.up.isDown) {
+    if (input.up.isDown) {
       this.checkScale();
       this.guy.anims.play("walk", true);
       this.guy.setVelocityY(-((ySpeed * this.guy.y) / minY));
     }
-    if (this.cursors.down.isDown) {
+    if (input.down.isDown) {
       this.checkScale();
       this.guy.anims.play("walk", true);
       this.guy.setVelocityY((ySpeed * this.guy.y) / minY);
     }
-    if (this.cursors.down.isUp && this.cursors.up.isUp) {
+    if (input.down.isUp && input.up.isUp) {
       this.guy.setVelocityY(0);
-      if (this.cursors.left.isUp && this.cursors.right.isUp) {
+      if (input.left.isUp && input.right.isUp) {
         this.guy.anims.play("stand", true);
       }
     }
-    if (this.cursors.left.isUp && this.cursors.right.isUp) {
+    if (input.left.isUp && input.right.isUp) {
       this.guy.setVelocityX(0);
     }
 
@@ -208,19 +206,15 @@ export default class Scene2 extends Phaser.Scene {
   */
 
   checkScale() {
-    if (this.guy.y > 528) {
-      this.children.bringToTop(this.guy);
-    } else if (this.guy.y > 500) {
-      this.children.bringToTop(this.guy);
-      this.children.bringToTop(this.right);
-    } else if (this.guy.y > 446) {
-      this.children.bringToTop(this.guy);
-      this.children.bringToTop(this.right);
-      this.children.bringToTop(this.left);
-    } else {
-      this.children.bringToTop(this.right);
-      this.children.bringToTop(this.left);
-      this.children.bringToTop(this.front);
+    //
+  }
+
+  checkLeave() {
+    //console.log(this.guy.x);
+    //console.log(this.guy.y);
+    if (this.guy.x > 1000 && this.guy.y > 500) {
+      this.wantsChange = true;
+      //console.log(this.wantsChange);
     }
   }
 }

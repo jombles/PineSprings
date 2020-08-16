@@ -5,15 +5,16 @@ export default class Richard extends Character {
     super("Richard");
 
     const objects = scene.cache.json.get("objects");
-    scene.characters.richard = scene.matter.add.sprite(1100, 400, "guy", 0, {
+    this.sprite = scene.matter.add.sprite(1100, 400, "guy", 0, {
       shape: objects.richard,
       isStatic: true
     });
+    scene.characters.richard = this.sprite;
 
-    scene.characters.richard.body.inertia = Infinity;
-    scene.characters.richard.setScale(
-      scene.characters.richard.scale * 0.7,
-      scene.characters.richard.scale * 0.7
+    this.sprite.body.inertia = Infinity;
+    this.sprite.setScale(
+      this.sprite.scale * 0.7,
+      this.sprite.scale * 0.7
     );
     scene.anims.create({
       key: "chill",
@@ -24,7 +25,7 @@ export default class Richard extends Character {
       frameRate: 4,
       repeat: -1
     });
-    scene.characters.richard.anims.play("chill", true);
+    this.sprite.anims.play("chill", true);
   }
 
   getDefaultDialogue(character) {
