@@ -1,14 +1,15 @@
 import Phaser from "phaser";
-//import Richard from "./characters/npcs/Richard";
-const world = require("./assets/world.json");
-const backC = require("./assets/inn.jpg");
-//const frontC = require("./assets/outside-coffee-shop-full-front.png");
-//const leftC = require("./assets/outside-coffee-shop-left-rail.png");
-//const rightC = require("./assets/outside-coffee-shop-right-rail.png");
-const guyImg = require("./assets/main-guy-large.png");
-const richardImg = require("./assets/richard-large.png");
-const lofi1 = require("./assets/music/longform001.mp3");
-const mute = require("./assets/mute-icon-white.png");
+import Richard from "../characters/npcs/Richard";
+import { handleCollision } from "../dialog";
+const world = require("../assets/world.json");
+const backC = require("../assets/outside-coffee-shop.jpg");
+const frontC = require("../assets/outside-coffee-shop-full-front.png");
+const leftC = require("../assets/outside-coffee-shop-left-rail.png");
+const rightC = require("../assets/outside-coffee-shop-right-rail.png");
+const guyImg = require("../assets/main-guy-large.png");
+const richardImg = require("../assets/richard-large.png");
+const lofi1 = require("../assets/music/longform001.mp3");
+const mute = require("../assets/mute-icon-white.png");
 //const lofi2 = require("./assets/music/longform002.mp3");
 //const lofi3 = require("./assets/music/longform003.mp3");
 //const lofi4 = require("./assets/music/longform004.mp3");
@@ -20,19 +21,18 @@ const baseScale = 0.3;
 const ySpeed = 0.5;
 const speedScale = 2.6;
 
-var music;
+export default class Coffee extends Phaser.Scene {
+  constructor(handle) {
+    super(handle);
+  }
 
-export default class Scene2 extends Phaser.Scene {
   preload() {
     this.dialog = false;
     this.guy = null;
     this.characters = {};
-    this.cursors = this.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.W,
-      down: Phaser.Input.Keyboard.KeyCodes.S,
-      left: Phaser.Input.Keyboard.KeyCodes.A,
-      right: Phaser.Input.Keyboard.KeyCodes.D
-    });
+    this.load.image("right", rightC);
+    this.load.image("left", leftC);
+    this.load.image("front", frontC);
     this.load.image("back", backC);
     this.load.image("mute", mute);
     this.back = null;
@@ -40,6 +40,8 @@ export default class Scene2 extends Phaser.Scene {
     this.right = null;
     this.front = null;
     this.music = null;
+
+    this.wantsChange = false;
     this.soundTrigger = false;
 
     this.load.spritesheet("guy", guyImg, {
@@ -57,12 +59,6 @@ export default class Scene2 extends Phaser.Scene {
       "rexUI",
       "rexUI"
     );
-
-    this.load.audio("lofi1", lofi1);
-    //this.load.audio("lofi2", lofi2);
-    //this.load.audio("lofi3", lofi3);
-    //this.load.audio("lofi4", lofi4);
-    //this.sound.decodeAudio("lofi1", lofi1);
   }
 
   create() {
@@ -73,17 +69,50 @@ export default class Scene2 extends Phaser.Scene {
     this.back = this.matter.add.image(0, 0, "back", null, {
       shape: objects.back,
       isStatic: true
-
       // position: { x: 0, y: 0 }
     });
     this.back.setPosition(this.back.displayOriginX, this.back.displayOriginY);
 
+    //this.back.setScale(800 / this.back.width, 800 / this.back.width);
+
+    // console.log(this.back.width * this.back.centerOfMass.x);
+    // console.log(this.back.height * this.back.centerOfMass.y);
+
+    this.left = this.matter.add.sprite(0, 0, "left", null, {
+      shape: objects.left
+    });
+    //this.left.setScale(800 / this.left.width, 600 / this.left.height);
+
+    this.left.setPosition(this.left.displayOriginX, this.left.displayOriginY);
+
+    this.right = this.matter.add.sprite(0, 0, "right", null, {
+      shape: objects.right
+    });
+    //this.right.setScale(800 / this.right.width, 600 / this.right.height);
+    this.right.setPosition(
+      this.right.displayOriginX,
+      this.right.displayOriginY
+    );
+
+    this.front = this.matter.add.sprite(0, 0, "front", null, {
+      shape: objects.front
+    });
+    this.front.setPosition(
+      this.front.displayOriginX,
+      this.front.displayOriginY
+    );
     //this.front.setScale(800 / this.front.width, 600 / this.front.height);
     this.guy = this.matter.add.sprite(0, 0, "guy", 0, {
       shape: objects.guy
     });
     this.guy.setOrigin(0.5, 1);
     this.guy.body.inertia = Infinity;
+    this.guy.setScale(16 / this.guy.width, 16 / this.guy.width);
+
+    this.children.bringToTop(this.right);
+
+    // console.log("first scale: " + this.guy.width);
+    this.guy.setScale(1006 / this.guy.width, 1006 / this.guy.width);
     // console.log("second scale: " + this.guy.width);
     //this.matter.world.renderBodyBounds(back.body);
     //this.matter.Body.setStatic(back.body,true);
@@ -106,25 +135,13 @@ export default class Scene2 extends Phaser.Scene {
       repeat: -1
     });
 
-    this.mute = this.matter.add.image(15, 15, "mute");
-
-    this.mute.setInteractive();
-
-    this.mute.on("pointerdown", function (pointer) {
-      if (music.volume < 0.11 && music.volume > 0.09) {
-        console.log("clicking mute");
-        music.volume = 0.0;
-      } else {
-        console.log(music.volume);
-        music.volume = 0.1;
-      }
-    });
-
-    this.children.bringToTop(this.mute);
+    this.rich = new Richard(this);
+    this.children.bringToTop(this.right);
   }
 
-  update() {
+  sceneUpdate(input) {
     this.guy.setRotation(0);
+    this.checkLeave();
     var scaleVal = this.guy.y - minY;
     var scaleRatio = baseScale + (scaleVal / diffY) * scalingDif * textureScale;
     if (this.guy.scale < 0) {
@@ -132,51 +149,47 @@ export default class Scene2 extends Phaser.Scene {
     } else {
       this.guy.setScale(scaleRatio, scaleRatio);
     }
-    if (this.cursors.left.isDown) {
+    if (input.left.isDown) {
       this.guy.anims.play("walk", true);
       this.guy.setVelocityX(-((this.guy.y * speedScale - 1.6) / minY));
 
-      if (!this.cursors.right.isDown) {
+      if (!input.right.isDown) {
         this.guy.flipX = true;
         //this.guy.setScale(-this.guy.scale., this.guy.scale);
       }
     }
-    if (this.cursors.right.isDown) {
+    if (input.right.isDown) {
       this.guy.anims.play("walk", true);
       this.guy.setVelocityX((this.guy.y * speedScale - 1.6) / minY);
 
-      if (!this.cursors.left.isDown) {
+      if (!input.left.isDown) {
         this.guy.flipX = false;
       }
     }
-    if (this.cursors.up.isDown) {
+    if (input.up.isDown) {
       this.checkScale();
       this.guy.anims.play("walk", true);
       this.guy.setVelocityY(-((ySpeed * this.guy.y) / minY));
     }
-    if (this.cursors.down.isDown) {
+    if (input.down.isDown) {
       this.checkScale();
       this.guy.anims.play("walk", true);
       this.guy.setVelocityY((ySpeed * this.guy.y) / minY);
     }
-    if (this.cursors.down.isUp && this.cursors.up.isUp) {
+    if (input.down.isUp && input.up.isUp) {
       this.guy.setVelocityY(0);
-      if (this.cursors.left.isUp && this.cursors.right.isUp) {
+      if (input.left.isUp && input.right.isUp) {
         this.guy.anims.play("stand", true);
       }
     }
-    if (this.cursors.left.isUp && this.cursors.right.isUp) {
+    if (input.left.isUp && input.right.isUp) {
       this.guy.setVelocityX(0);
     }
 
     const character = {
       getName: () => "Guy"
     };
-  }
 
-  /* Richard Callbacks
-     *
-     *
     const onCollideCallback = () => {
       this.dialog = this.rich.createDialogue(
         this,
@@ -205,7 +218,6 @@ export default class Scene2 extends Phaser.Scene {
       this.dialogDismissed = false;
     }
   }
-  */
 
   checkScale() {
     if (this.guy.y > 528) {
@@ -221,6 +233,14 @@ export default class Scene2 extends Phaser.Scene {
       this.children.bringToTop(this.right);
       this.children.bringToTop(this.left);
       this.children.bringToTop(this.front);
+    }
+  }
+  checkLeave() {
+    //console.log(this.guy.x);
+    //console.log(this.guy.y);
+    if (this.guy.x < 200 && this.guy.y > 500) {
+      this.wantsChange = true;
+      //console.log(this.wantsChange);
     }
   }
 }
