@@ -27,7 +27,7 @@ const getDialogConfig = (scene, { content, title, choices, actions }) => {
 
     background: scene.rexUI.add.container(0, 400, 100, 100, 0, 0x000000),
 
-    title: createLabel(scene, title).setDraggable(),
+    title: createLabel(scene, title),
     content: createLabel(scene, content),
     /* eslint-disable */
     choices: _.map(choices, (choice) => createLabel(scene, choice)),
@@ -94,16 +94,18 @@ const createDialog = (scene, config) => {
   var dialog = scene.rexUI.add
     .dialog(dialogConfig)
     //.fadeIn(400)
-    .setDraggable("background") // Draggable-background
-    .layout();
+	.layout();
 
-  scene.print = scene.add.text(0, 0, "");
   dialog
     .on(
       "button.click",
       function (button, groupName, index, pointer, event) {
-        config.onClick(groupName, index);
-        scene.print.text += groupName + "-" + index + ": " + button.text + "\n";
+          console.log(groupName + "-" + index + ": " + button.text);
+		  if (config.onClick) {
+			config.onClick(groupName, index, button.text);
+		  } else {
+			dismissDialog(scene);
+		  }
       },
       scene
     )
@@ -123,7 +125,7 @@ const handleCollision = (scene, npc) => {
   };
 
   const onCollideCallback = () => {
-    scene.dialog = npc.createDialogue(scene, npc.getDefaultDialogue(character));
+    scene.dialog = npc.getCurrentDialogue(scene);
   };
 
   let checked = false;
