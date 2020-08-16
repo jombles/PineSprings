@@ -93,9 +93,9 @@ const createDialog = (scene, config) => {
   const dialogConfig = getDialogConfig(scene, config);
   var dialog = scene.rexUI.add
     .dialog(dialogConfig)
+    //.fadeIn(400)
     .setDraggable("background") // Draggable-background
-    .layout()
-    .fadeIn(500);
+    .layout();
 
   scene.print = scene.add.text(0, 0, "");
   dialog
