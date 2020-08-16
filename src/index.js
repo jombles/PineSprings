@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import MainScene from "./main-scene.js";
-import Scene2 from "./Scene2.js";
+import Coffee from "./scenes/Coffee.js";
+import Hotel from "./scenes/Hotel.js";
 
 const config = {
   type: Phaser.CANVAS,
@@ -8,12 +9,12 @@ const config = {
   height: 1500,
   backgroundColor: "#000c1f",
   parent: "game",
-  scene: Scene2,
+  scene: MainScene,
   physics: {
     default: "matter",
     matter: {
       // This is the default value
-      debug: true,
+      debug: false,
       gravity: { y: 0 },
 
       // You can also pass in Matter.Engine config properties:
