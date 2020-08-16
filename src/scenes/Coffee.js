@@ -7,6 +7,7 @@ const frontC = require("../assets/outside-coffee-shop-full-front.png");
 const leftC = require("../assets/outside-coffee-shop-left-rail.png");
 const rightC = require("../assets/outside-coffee-shop-right-rail.png");
 const guyImg = require("../assets/main-guy-large.png");
+const guyIdleImg = require("../assets/guy-idle-large.png");
 const richardImg = require("../assets/richard-large.png");
 const mute = require("../assets/mute-icon-white.png");
 //const lofi2 = require("./assets/music/longform002.mp3");
@@ -38,11 +39,17 @@ export default class Coffee extends Phaser.Scene {
     this.left = null;
     this.right = null;
     this.front = null;
+    this.swingDone = false;
+    this.watchLook = false;
 
     this.wantsChange = false;
     this.soundTrigger = false;
 
     this.load.spritesheet("guy", guyImg, {
+      frameWidth: 125,
+      frameHeight: 225
+    });
+    this.load.spritesheet("guy-idle", guyIdleImg, {
       frameWidth: 125,
       frameHeight: 225
     });
@@ -127,11 +134,35 @@ export default class Coffee extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "stand",
-      frames: this.anims.generateFrameNumbers("guy", { start: 0, end: 1 }),
+      key: "stand1",
+      frames: this.anims.generateFrameNumbers("guy-idle", { start: 0, end: 0 }),
       frameRate: 1,
       repeat: -1
     });
+
+    this.anims.create({
+      key: "stand2",
+      frames: this.anims.generateFrameNumbers("guy-idle", { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: 3
+    });
+
+    this.anims.create({
+      key: "stand3",
+      frames: this.anims.generateFrameNumbers("guy-idle", {frames:[0,4,5,6,7,8,9,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,13,14,15,16,0,1,1,2,2,3,4,1,1,2,2,3,4]}),
+      frameRate: 10,
+      delay: 4200,
+      repeat: -1,
+      repeatDelay: 5000
+    });
+
+    this.anims.create({
+      key: "swing",
+      frames: this.anims.generateFrameNumbers("guy-idle", { frames:[18,17,0] }),
+      frameRate: 15,
+      repeat: 0
+    });
+    console.log(this.anims);
 
     this.rich = new Richard(this);
     this.children.bringToTop(this.right);
@@ -148,6 +179,8 @@ export default class Coffee extends Phaser.Scene {
       this.guy.setScale(scaleRatio, scaleRatio);
     }
     if (input.left.isDown) {
+      this.swingDone = false;
+      this.watchLook = false;
       this.guy.anims.play("walk", true);
       this.guy.setVelocityX(-((this.guy.y * speedScale - 1.6) / minY));
 
@@ -157,6 +190,8 @@ export default class Coffee extends Phaser.Scene {
       }
     }
     if (input.right.isDown) {
+      this.swingDone = false;
+      this.watchLook = false;
       this.guy.anims.play("walk", true);
       this.guy.setVelocityX((this.guy.y * speedScale - 1.6) / minY);
 
@@ -165,11 +200,15 @@ export default class Coffee extends Phaser.Scene {
       }
     }
     if (input.up.isDown) {
+      this.swingDone = false;
+      this.watchLook = false;
       this.checkScale();
       this.guy.anims.play("walk", true);
       this.guy.setVelocityY(-((ySpeed * this.guy.y) / minY));
     }
     if (input.down.isDown) {
+      this.swingDone = false;
+      this.watchLook = false;
       this.checkScale();
       this.guy.anims.play("walk", true);
       this.guy.setVelocityY((ySpeed * this.guy.y) / minY);
@@ -177,7 +216,15 @@ export default class Coffee extends Phaser.Scene {
     if (input.down.isUp && input.up.isUp) {
       this.guy.setVelocityY(0);
       if (input.left.isUp && input.right.isUp) {
-        this.guy.anims.play("stand", true);
+        if(!this.swingDone){
+          this.guy.anims.play("swing", true);
+          this.swingDone = true;
+        } else {
+          if(!this.guy.anims.isPlaying && !this.watchLook){
+            this.watchLook = true;
+            this.guy.anims.play("stand3", true);
+          }
+        }
       }
     }
     if (input.left.isUp && input.right.isUp) {
