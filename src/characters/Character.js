@@ -1,4 +1,4 @@
-import { createDialog } from "../dialog";
+import { createDialog, dismissDialog } from "../dialog";
 
 export default class Character {
   constructor(name) {
@@ -16,9 +16,7 @@ export default class Character {
       actions: ["Okay..."],
       onClick: (type, index) => {
         if (type === "actions" && index === 0) {
-          scene.dialog.scaleDownDestroy(100);
-          scene.dialog = undefined;
-          scene.dialogDismissed = true;
+          dismissDialog(scene);
         }
       }
     });

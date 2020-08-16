@@ -8,11 +8,15 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
+    "lodash": "4.17.20",
     "matter-js": "0.14.2",
     "phaser": "3.24.1"
   },
   "devDependencies": {
     "parcel-bundler": "^1.6.1"
   },
-  "keywords": ["javascript", "starter"]
+  "keywords": [
+    "javascript",
+    "starter"
+  ]
 }
