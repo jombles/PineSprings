@@ -1,28 +1,12 @@
 import Phaser from "phaser";
-import Richard from "./characters/npcs/Richard";
 
 import Coffee from "./scenes/Coffee";
-import { handleCollision } from "./dialog";
 import Hotel from "./scenes/Hotel";
-const world = require("./assets/world.json");
-const backC = require("./assets/outside-coffee-shop.jpg");
-const frontC = require("./assets/outside-coffee-shop-full-front.png");
-const leftC = require("./assets/outside-coffee-shop-left-rail.png");
-const rightC = require("./assets/outside-coffee-shop-right-rail.png");
-const guyImg = require("./assets/main-guy-large.png");
-const richardImg = require("./assets/richard-large.png");
 const lofi1 = require("./assets/music/longform001.mp3");
 const mute = require("./assets/mute-icon-white.png");
 //const lofi2 = require("./assets/music/longform002.mp3");
 //const lofi3 = require("./assets/music/longform003.mp3");
 //const lofi4 = require("./assets/music/longform004.mp3");
-const minY = 400;
-const diffY = 777 - minY;
-const scalingDif = 4.5;
-const textureScale = 0.35;
-const baseScale = 0.3;
-const ySpeed = 0.5;
-const speedScale = 2.6;
 
 var music;
 
@@ -38,6 +22,7 @@ export default class MainScene extends Phaser.Scene {
     this.frame = null;
 
     this.load.audio("lofi1", lofi1);
+    this.load.image("mute", mute);
     //this.load.audio("lofi2", lofi2);
     //this.load.audio("lofi3", lofi3);
     //this.load.audio("lofi4", lofi4);
@@ -45,6 +30,10 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
+    music = this.sound.add("lofi1");
+    music.volume = 0.0;
+    music.play();
+
     let coffee = new Coffee("coffee");
 
     this.scene.add("coffee", coffee, true);
@@ -65,15 +54,6 @@ export default class MainScene extends Phaser.Scene {
     });
 
     this.children.bringToTop(this.mute);
-    this.load.spritesheet("guy", guyImg, {
-      frameWidth: 125,
-      frameHeight: 225
-    });
-    this.load.spritesheet("richard", richardImg, {
-      frameWidth: 125,
-      frameHeight: 225
-    });
-    this.load.json("objects", world);
     this.load.scenePlugin(
       "rexuiplugin",
       "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js",

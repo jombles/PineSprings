@@ -8,7 +8,6 @@ const leftC = require("../assets/outside-coffee-shop-left-rail.png");
 const rightC = require("../assets/outside-coffee-shop-right-rail.png");
 const guyImg = require("../assets/main-guy-large.png");
 const richardImg = require("../assets/richard-large.png");
-const lofi1 = require("../assets/music/longform001.mp3");
 const mute = require("../assets/mute-icon-white.png");
 //const lofi2 = require("./assets/music/longform002.mp3");
 //const lofi3 = require("./assets/music/longform003.mp3");
@@ -39,7 +38,6 @@ export default class Coffee extends Phaser.Scene {
     this.left = null;
     this.right = null;
     this.front = null;
-    this.music = null;
 
     this.wantsChange = false;
     this.soundTrigger = false;
@@ -186,37 +184,7 @@ export default class Coffee extends Phaser.Scene {
       this.guy.setVelocityX(0);
     }
 
-    const character = {
-      getName: () => "Guy"
-    };
-
-    const onCollideCallback = () => {
-      this.dialog = this.rich.createDialogue(
-        this,
-        this.rich.getDefaultDialogue(character)
-      );
-    };
-
-    let checked = false;
-    const processCallback = () => {
-      checked = true;
-      return !this.dialog && !this.dialogDismissed;
-    };
-
-    this.matter.overlap(
-      this.characters.richard,
-      [this.guy],
-      onCollideCallback,
-      processCallback
-    );
-
-    if (!checked) {
-      if (this.dialog) {
-        this.dialog.fadeOutDestroy(100);
-        this.dialog = undefined;
-      }
-      this.dialogDismissed = false;
-    }
+    handleCollision(this, this.rich);
   }
 
   checkScale() {
