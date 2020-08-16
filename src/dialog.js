@@ -117,4 +117,40 @@ const createDialog = (scene, config) => {
   return dialog;
 };
 
-export { getDialogConfig, createDialog };
+const handleCollision = (scene, npc) => {
+  const character = {
+    getName: () => "Guy"
+  };
+
+  const onCollideCallback = () => {
+    scene.dialog = npc.createDialogue(scene, npc.getDefaultDialogue(character));
+  };
+
+  let checked = false;
+  const processCallback = () => {
+    checked = true;
+    return !scene.dialog && !scene.dialogDismissed;
+  };
+
+  scene.matter.overlap(
+    scene.characters.richard,
+    [scene.guy],
+    onCollideCallback,
+    processCallback
+  );
+
+  if (!checked) {
+    if (scene.dialog) {
+      dismissDialog(scene);
+    }
+    scene.dialogDismissed = false;
+  }
+};
+
+const dismissDialog = (scene) => {
+  scene.dialog.fadeOutDestroy(100);
+  scene.dialog = undefined;
+  scene.dialogDismissed = true;
+};
+
+export { createDialog, handleCollision, dismissDialog };

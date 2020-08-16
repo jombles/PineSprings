@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import Richard from "./characters/npcs/Richard";
+
 import Coffee from "./scenes/Coffee";
 import { handleCollision } from "./dialog";
 import Hotel from "./scenes/Hotel";
@@ -93,7 +94,7 @@ export default class MainScene extends Phaser.Scene {
       this.scene.add("hotel", hotel, true);
       this.frame = hotel;
       console.log("We want to change scenes!");
-    }
+
     */
   }
 }
