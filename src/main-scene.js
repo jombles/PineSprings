@@ -142,16 +142,6 @@ export default class MainScene extends Phaser.Scene {
       repeat: -1
     });
 
-    //this.input.on("pointerdown", function () {
-    //if (!this.soundTrigger) {
-    //this.soundTrigger = true;
-    music = this.sound.add("lofi1");
-    music.volume = 0.0;
-    music.play();
-    //}
-    //});
-    //this.children.bringToTop(this.mute);
-
     this.mute = this.matter.add.image(15, 15, "mute");
 
     this.mute.setInteractive();
@@ -244,7 +234,7 @@ export default class MainScene extends Phaser.Scene {
 
     if (!checked) {
       if (this.dialog) {
-        this.dialog.scaleDownDestroy(100);
+        this.dialog.fadeOutDestroy(100);
         this.dialog = undefined;
       }
       this.dialogDismissed = false;

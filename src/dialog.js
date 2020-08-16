@@ -25,7 +25,7 @@ const getDialogConfig = (scene, { content, title, choices, actions }) => {
     y: 620,
     width: 500,
 
-    background: scene.rexUI.add.roundRectangle(0, 400, 100, 100, 5, 0x000000),
+    background: scene.rexUI.add.container(0, 400, 100, 100, 0, 0x000000),
 
     title: createLabel(scene, title).setDraggable(),
     content: createLabel(scene, content),
@@ -95,8 +95,7 @@ const createDialog = (scene, config) => {
     .dialog(dialogConfig)
     .setDraggable("background") // Draggable-background
     .layout()
-    // .drawBounds(scene.add.graphics(), 0xff0000)
-    .popUp(1000);
+    .fadeIn(500);
 
   scene.print = scene.add.text(0, 0, "");
   dialog
