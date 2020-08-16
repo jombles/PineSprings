@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import MainScene from "./main-scene.js";
+import Scene2 from "./Scene2.js";
 
 const config = {
   type: Phaser.CANVAS,
@@ -7,7 +8,7 @@ const config = {
   height: 1500,
   backgroundColor: "#000c1f",
   parent: "game",
-  scene: MainScene,
+  scene: Scene2,
   physics: {
     default: "matter",
     matter: {
