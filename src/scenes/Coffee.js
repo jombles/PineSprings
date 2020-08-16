@@ -8,6 +8,7 @@ const leftC = require("../assets/outside-coffee-shop-left-rail.png");
 const rightC = require("../assets/outside-coffee-shop-right-rail.png");
 const guyImg = require("../assets/main-guy-large.png");
 const guyIdleImg = require("../assets/guy-idle-large.png");
+const guyBlinkImg = require("../assets/guy-blink-large.png");
 const richardImg = require("../assets/richard-large.png");
 const mute = require("../assets/mute-icon-white.png");
 //const lofi2 = require("./assets/music/longform002.mp3");
@@ -50,6 +51,10 @@ export default class Coffee extends Phaser.Scene {
       frameHeight: 225
     });
     this.load.spritesheet("guy-idle", guyIdleImg, {
+      frameWidth: 125,
+      frameHeight: 225
+    });
+    this.load.spritesheet("guy-blink", guyBlinkImg, {
       frameWidth: 125,
       frameHeight: 225
     });
@@ -153,7 +158,7 @@ export default class Coffee extends Phaser.Scene {
       frameRate: 10,
       delay: 4200,
       repeat: -1,
-      repeatDelay: 5000
+      repeatDelay: 9000
     });
 
     this.anims.create({
@@ -162,7 +167,12 @@ export default class Coffee extends Phaser.Scene {
       frameRate: 15,
       repeat: 0
     });
-    console.log(this.anims);
+    this.anims.create({
+      key: "blink",
+      frames: this.anims.generateFrameNumbers("guy-blink", { frames:[0,2,3,1,0] }),
+      frameRate: 15,
+      repeat: 0
+    });
 
     this.rich = new Richard(this);
     this.children.bringToTop(this.right);
@@ -217,7 +227,7 @@ export default class Coffee extends Phaser.Scene {
       this.guy.setVelocityY(0);
       if (input.left.isUp && input.right.isUp) {
         if(!this.swingDone){
-          this.guy.anims.play("swing", true);
+          this.guy.anims.play("blink", true);
           this.swingDone = true;
         } else {
           if(!this.guy.anims.isPlaying && !this.watchLook){
