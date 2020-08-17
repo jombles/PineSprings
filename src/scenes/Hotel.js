@@ -1,4 +1,5 @@
-import Phaser from "phaser";
+import ControllableScene from './Controllable';
+import SceneKeys from './sceneKeys';
 //import Richard from "./characters/npcs/Richard";
 const world = require("../assets/world.json");
 const backC = require("../assets/inn.jpg");
@@ -22,12 +23,13 @@ const speedScale = 2.6;
 
 var music;
 
-export default class Hotel extends Phaser.Scene {
-  constructor(handle) {
-    super(handle);
+export default class Hotel extends ControllableScene {
+  constructor() {
+    super(SceneKeys.HOTEL);
   }
 
   preload() {
+	super.preload();
     this.dialog = false;
     this.guy = null;
     this.characters = {};
@@ -103,22 +105,6 @@ export default class Hotel extends Phaser.Scene {
       frameRate: 1,
       repeat: -1
     });
-
-    this.mute = this.matter.add.image(15, 15, "mute");
-
-    this.mute.setInteractive();
-
-    this.mute.on("pointerdown", function (pointer) {
-      if (music.volume < 0.11 && music.volume > 0.09) {
-        console.log("clicking mute");
-        music.volume = 0.0;
-      } else {
-        console.log(music.volume);
-        music.volume = 0.1;
-      }
-    });
-
-    this.children.bringToTop(this.mute);
   }
 
   sceneUpdate(input) {

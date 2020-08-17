@@ -1,4 +1,5 @@
-import Phaser from "phaser";
+import ControllableScene from './Controllable';
+import SceneKeys from './sceneKeys';
 import Richard from "../characters/npcs/Richard";
 import { handleCollision } from "../dialog";
 const world = require("../assets/world.json");
@@ -10,7 +11,6 @@ const guyImg = require("../assets/main-guy-large.png");
 const guyIdleImg = require("../assets/guy-idle-large.png");
 const guyBlinkImg = require("../assets/guy-blink-large.png");
 const richardImg = require("../assets/richard-large.png");
-const mute = require("../assets/mute-icon-white.png");
 //const lofi2 = require("./assets/music/longform002.mp3");
 //const lofi3 = require("./assets/music/longform003.mp3");
 //const lofi4 = require("./assets/music/longform004.mp3");
@@ -22,12 +22,13 @@ const baseScale = 0.3;
 const ySpeed = 0.5;
 const speedScale = 2.6;
 
-export default class Coffee extends Phaser.Scene {
-  constructor(handle) {
-    super(handle);
+export default class Coffee extends ControllableScene {
+  constructor() {
+   	 super(SceneKeys.COFFEE);
   }
 
   preload() {
+	super.preload();
     this.dialog = false;
     this.guy = null;
     this.characters = {};
@@ -35,7 +36,6 @@ export default class Coffee extends Phaser.Scene {
     this.load.image("left", leftC);
     this.load.image("front", frontC);
     this.load.image("back", backC);
-    this.load.image("mute", mute);
     this.back = null;
     this.left = null;
     this.right = null;
@@ -178,7 +178,8 @@ export default class Coffee extends Phaser.Scene {
     this.children.bringToTop(this.right);
   }
 
-  sceneUpdate(input) {
+  update() {
+	const input = this.cursors;
     this.guy.setRotation(0);
     this.checkLeave();
     var scaleVal = this.guy.y - minY;
@@ -261,11 +262,8 @@ export default class Coffee extends Phaser.Scene {
     }
   }
   checkLeave() {
-    //console.log(this.guy.x);
-    //console.log(this.guy.y);
     if (this.guy.x < 200 && this.guy.y > 500) {
-      this.wantsChange = true;
-      //console.log(this.wantsChange);
-    }
+		this.scene.switch(SceneKeys.HOTEL);
+	}
   }
 }
