@@ -8,9 +8,6 @@ var dialogProgress = {};
 
 export default class BaseScene extends Phaser.Scene {
 
-
-
-
 	changeScene(newSceneKey) {
 		this.scene.start(newSceneKey);
 		this.scene.stop(this.scene.key);
@@ -18,14 +15,18 @@ export default class BaseScene extends Phaser.Scene {
 
 
 
-	getDialogue = (npc) => {
-    var index = dialogSheet[npc].index || 0;
+	getDialogue(npc,index) {
+    //var index = dialogSheet[npc].index || 0;
     var dialogue = dialogSheet[npc].dialogue;
-    dialogSheet[npc].index++;
+    //dialogSheet[npc].index++;
     if(index < dialogue.length){
         return dialogue[index];
     } else {
         return false;
-    }
-};
+	}
+}
+
+maxDialog(npc){
+	return dialogSheet[npc].dialogue.length;
+}
 }
