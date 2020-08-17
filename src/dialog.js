@@ -9,6 +9,8 @@ const createLabel = (scene, text) => {
       fontSize: "16px",
       fontFamily: "Courier"
     }),
+    align: 'center',
+    expand: 'true',
 
     space: {
       left: 10,
@@ -68,7 +70,7 @@ const getDialogConfig = (scene, { content, title, choices, actions }) => {
     },
 
     expand: {
-      title: false
+      title: false,
       // content: false,
       // description: false,
       // choices: false,
@@ -77,7 +79,7 @@ const getDialogConfig = (scene, { content, title, choices, actions }) => {
 
     align: {
       title: "center",
-      // content: 'left',
+      content: "center",
       // description: 'left',
       // choices: 'left',
       actions: "right" // 'center'|'left'|'right'

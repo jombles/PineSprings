@@ -32,18 +32,25 @@ export default class Richard extends Character {
   getCurrentDialogue(scene) {
 		// TODO: make this dialogue dependent on game state.
 		const dialogue = this.getDefaultDialogue()
-		return this.createDialogue(scene, dialogue, ["Okay..."], (type, index, text) => {
-			if (text === '...') {
-				dismissDialog(scene);
-			} else if (type === "actions" && index === 0) {
-				scene.dialog.getElement('content').setText('What are you still doing here?');
-				scene.dialog.getElement('actions')[0].setText('...');
-			}
+		return this.createDialogue(scene, dialogue, ["..."], (type, index, text) => {
+      var d = scene.getDialogue(this.name);
+      console.log("dialogue: " + d);
+      if(!d){
+        dismissDialog(scene);
+        return; 
+      }
+      var width1 = scene.dialog.getElement('content').children[2].frame.cutWidth;
+			scene.dialog.getElement('content').setText(d[0]);
+      scene.dialog.getElement('actions')[0].setText(d[1]);
+      console.log(scene.dialog.getElement('content').children);
+      var width2 = scene.dialog.getElement('content').children[2].frame.cutWidth;
+      scene.dialog.getElement('content').children[2].x -= (width2 - width1)/2;
+      scene.dialog.getElement('content').children[0].width = scene.dialog.getElement('content').children[2].frame.cutWidth + 20;
 		}
 	);
   }
 
   getDefaultDialogue() {
-    return "God has forsaken us.";
+    return "New in town, huh?";
   }
 }
