@@ -1,5 +1,5 @@
-import Phaser from 'phaser';
-export default class ControllableScene extends Phaser.Scene {
+import BaseScene from './base';
+export default class ControllableScene extends BaseScene {
 	preload() {
 		this.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
