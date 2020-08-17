@@ -2,7 +2,8 @@ import ControllableScene from './Controllable';
 import SceneKeys from './sceneKeys';
 //import Richard from "./characters/npcs/Richard";
 const world = require("../assets/world.json");
-const backC = require("../assets/inn.jpg");
+const innJ = require("../assets/inn.json");
+const innC = require("../assets/inn.jpg");
 //const frontC = require("./assets/outside-coffee-shop-full-front.png");
 //const leftC = require("./assets/outside-coffee-shop-left-rail.png");
 //const rightC = require("./assets/outside-coffee-shop-right-rail.png");
@@ -11,8 +12,8 @@ const richardImg = require("../assets/richard-large.png");
 const minY = 400;
 const diffY = 777 - minY;
 const scalingDif = 4.5;
-const textureScale = 0.35;
-const baseScale = 0.3;
+const textureScale = 0.15;
+const baseScale = 0.1;
 const ySpeed = 0.5;
 const speedScale = 2.6;
 
@@ -26,7 +27,7 @@ export default class Hotel extends ControllableScene {
     this.dialog = false;
     this.guy = null;
     this.characters = {};
-    this.load.image("backHotel", backC);
+    this.load.image("backHotel", innC);
     this.back = null;
     this.left = null;
     this.right = null;
@@ -42,6 +43,7 @@ export default class Hotel extends ControllableScene {
       frameHeight: 225
     });
     this.load.json("objects", world);
+    this.load.json("innJ", innJ);
     this.load.scenePlugin(
       "rexuiplugin",
       "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js",
@@ -53,10 +55,11 @@ export default class Hotel extends ControllableScene {
   create() {
     //this.matter.world.setBounds(0, 0, 800, 600);
     var objects = this.cache.json.get("objects");
+    var innBody = this.cache.json.get("innJ");
     //console.log(objects.back);
 
     this.back = this.matter.add.image(0, 0, "backHotel", null, {
-      shape: objects.back,
+      shape: innBody.inn,
       isStatic: true
 
       // position: { x: 0, y: 0 }
@@ -75,7 +78,7 @@ export default class Hotel extends ControllableScene {
     //console.log(back.body);
     this.guy.setPosition(
       600 + this.guy.centerOfMass.x,
-      500 + this.guy.centerOfMass.y
+      700 + this.guy.centerOfMass.y
     );
     this.anims.create({
       key: "walk",
