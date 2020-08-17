@@ -263,7 +263,7 @@ export default class Coffee extends ControllableScene {
   }
   checkLeave() {
     if (this.guy.x < 200 && this.guy.y > 500) {
-		this.scene.switch(SceneKeys.HOTEL);
+		this.changeScene(SceneKeys.HOTEL);
 	}
   }
 }

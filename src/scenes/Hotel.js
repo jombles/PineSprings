@@ -92,7 +92,9 @@ export default class Hotel extends ControllableScene {
     });
   }
 
-  sceneUpdate(input) {
+  update() {
+	const input = this.cursors;
+	this.checkLeave();
     this.guy.setRotation(0);
     var scaleVal = this.guy.y - minY;
     var scaleRatio = baseScale + (scaleVal / diffY) * scalingDif * textureScale;
@@ -181,11 +183,9 @@ export default class Hotel extends ControllableScene {
   }
 
   checkLeave() {
-    //console.log(this.guy.x);
-    //console.log(this.guy.y);
-    if (this.guy.x > 1000 && this.guy.y > 500) {
-      this.wantsChange = true;
-      //console.log(this.wantsChange);
-    }
+    if (this.guy.x < 200 && this.guy.y > 500) {
+		this.changeScene(SceneKeys.COFFEE);
+
+	}
   }
 }
