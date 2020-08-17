@@ -1,6 +1,5 @@
 export default {
     "Richard": {
-      index: 1,
     dialogue: [
         ["New in town, huh?", "..."],
         ["You should leave now. There's nothing here for you.", "..."],
@@ -11,5 +10,5 @@ export default {
         ["I'm so lonely.", "..."],
         ["I have a gun at my house. Please shoot me in the head. Please.", "..."]
       ]
-    }
+    } 
 }
