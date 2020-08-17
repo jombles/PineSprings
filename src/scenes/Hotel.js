@@ -8,11 +8,6 @@ const backC = require("../assets/inn.jpg");
 //const rightC = require("./assets/outside-coffee-shop-right-rail.png");
 const guyImg = require("../assets/main-guy-large.png");
 const richardImg = require("../assets/richard-large.png");
-const lofi1 = require("../assets/music/longform001.mp3");
-const mute = require("../assets/mute-icon-white.png");
-//const lofi2 = require("./assets/music/longform002.mp3");
-//const lofi3 = require("./assets/music/longform003.mp3");
-//const lofi4 = require("./assets/music/longform004.mp3");
 const minY = 400;
 const diffY = 777 - minY;
 const scalingDif = 4.5;
@@ -20,8 +15,6 @@ const textureScale = 0.35;
 const baseScale = 0.3;
 const ySpeed = 0.5;
 const speedScale = 2.6;
-
-var music;
 
 export default class Hotel extends ControllableScene {
   constructor() {
@@ -33,13 +26,11 @@ export default class Hotel extends ControllableScene {
     this.dialog = false;
     this.guy = null;
     this.characters = {};
-    this.load.image("back", backC);
-    this.load.image("mute", mute);
+    this.load.image("backHotel", backC);
     this.back = null;
     this.left = null;
     this.right = null;
     this.front = null;
-    this.music = null;
     this.soundTrigger = false;
 
     this.load.spritesheet("guy", guyImg, {
@@ -57,12 +48,6 @@ export default class Hotel extends ControllableScene {
       "rexUI",
       "rexUI"
     );
-
-    this.load.audio("lofi1", lofi1);
-    //this.load.audio("lofi2", lofi2);
-    //this.load.audio("lofi3", lofi3);
-    //this.load.audio("lofi4", lofi4);
-    //this.sound.decodeAudio("lofi1", lofi1);
   }
 
   create() {
@@ -70,7 +55,7 @@ export default class Hotel extends ControllableScene {
     var objects = this.cache.json.get("objects");
     //console.log(objects.back);
 
-    this.back = this.matter.add.image(0, 0, "back", null, {
+    this.back = this.matter.add.image(0, 0, "backHotel", null, {
       shape: objects.back,
       isStatic: true
 
