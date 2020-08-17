@@ -1,7 +1,8 @@
 import Phaser from "phaser";
-import MainScene from "./main-scene.js";
+import Boot from "./scenes/Boot.js";
 import Coffee from "./scenes/Coffee.js";
 import Hotel from "./scenes/Hotel.js";
+import UI from './scenes/UI';
 
 const config = {
   type: Phaser.CANVAS,
@@ -9,7 +10,7 @@ const config = {
   height: 1500,
   backgroundColor: "#000c1f",
   parent: "game",
-  scene: MainScene,
+  scene: [Boot, UI, Coffee, Hotel],
   physics: {
     default: "matter",
     matter: {
