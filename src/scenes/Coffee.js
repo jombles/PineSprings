@@ -15,6 +15,12 @@ const richardImg = require("../assets/richard-large.png");
 //const lofi2 = require("./assets/music/longform002.mp3");
 //const lofi3 = require("./assets/music/longform003.mp3");
 //const lofi4 = require("./assets/music/longform004.mp3");
+const scaleInfo = {
+  "minY":400,
+  "maxY":777,
+  "close":6,
+  "far":60,
+}
 
 const maxDist = 60;
 const minDist = 6;
@@ -108,7 +114,7 @@ export default class Coffee extends ControllableScene {
       this.front.displayOriginX,
       this.front.displayOriginY
     );
-    this.guy = new Guy(this, 63, 600, 500);
+    this.guy = new Guy(this, 600, 500, scaleInfo);
 
     this.children.bringToTop(this.right);
 
