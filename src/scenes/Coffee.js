@@ -2,6 +2,7 @@ import ControllableScene from './Controllable';
 import SceneKeys from './sceneKeys';
 import Richard from "../characters/npcs/Richard";
 import { handleCollision } from "../dialog";
+import Guy from '../characters/Guy';
 const world = require("../assets/world.json");
 const backC = require("../assets/outside-coffee-shop.jpg");
 const frontC = require("../assets/outside-coffee-shop-full-front.png");
@@ -14,13 +15,11 @@ const richardImg = require("../assets/richard-large.png");
 //const lofi2 = require("./assets/music/longform002.mp3");
 //const lofi3 = require("./assets/music/longform003.mp3");
 //const lofi4 = require("./assets/music/longform004.mp3");
-const minY = 400;
-const diffY = 777 - minY;
-const scalingDif = 4.5;
-const textureScale = 0.35;
-const baseScale = 0.3;
-const ySpeed = 0.5;
-const speedScale = 2.6;
+
+const maxDist = 60;
+const minDist = 6;
+
+
 
 export default class Coffee extends ControllableScene {
   constructor() {
@@ -40,8 +39,6 @@ export default class Coffee extends ControllableScene {
     this.left = null;
     this.right = null;
     this.front = null;
-    this.swingDone = false;
-    this.watchLook = false;
 
     this.wantsChange = false;
     this.soundTrigger = false;
@@ -111,148 +108,33 @@ export default class Coffee extends ControllableScene {
       this.front.displayOriginX,
       this.front.displayOriginY
     );
-    //this.front.setScale(800 / this.front.width, 600 / this.front.height);
-    this.guy = this.matter.add.sprite(0, 0, "guy", 0, {
-      shape: objects.guy
-    });
-    this.guy.setOrigin(0.5, 1);
-    this.guy.body.inertia = Infinity;
-    this.guy.setScale(16 / this.guy.width, 16 / this.guy.width);
+    this.guy = new Guy(this, 63, 600, 500);
 
     this.children.bringToTop(this.right);
-
-    // console.log("first scale: " + this.guy.width);
-    this.guy.setScale(1006 / this.guy.width, 1006 / this.guy.width);
-    // console.log("second scale: " + this.guy.width);
-    //this.matter.world.renderBodyBounds(back.body);
-    //this.matter.Body.setStatic(back.body,true);
-    //console.log(back.body);
-    this.guy.setPosition(
-      600 + this.guy.centerOfMass.x,
-      500 + this.guy.centerOfMass.y
-    );
-    this.anims.create({
-      key: "walk",
-      frames: this.anims.generateFrameNumbers("guy", { start: 2, end: 9 }),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    this.anims.create({
-      key: "stand1",
-      frames: this.anims.generateFrameNumbers("guy-idle", { start: 0, end: 0 }),
-      frameRate: 1,
-      repeat: -1
-    });
-
-    this.anims.create({
-      key: "stand2",
-      frames: this.anims.generateFrameNumbers("guy-idle", { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: 3
-    });
-
-    this.anims.create({
-      key: "stand3",
-      frames: this.anims.generateFrameNumbers("guy-idle", {frames:[0,4,5,6,7,8,9,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,13,14,15,16,0,1,1,2,2,3,4,1,1,2,2,3,4]}),
-      frameRate: 10,
-      delay: 4200,
-      repeat: -1,
-      repeatDelay: 9000
-    });
-
-    this.anims.create({
-      key: "swing",
-      frames: this.anims.generateFrameNumbers("guy-idle", { frames:[18,17,0] }),
-      frameRate: 15,
-      repeat: 0
-    });
-    this.anims.create({
-      key: "blink",
-      frames: this.anims.generateFrameNumbers("guy-blink", { frames:[0,2,3,1,0] }),
-      frameRate: 15,
-      repeat: 0
-    });
 
     this.rich = new Richard(this);
     this.children.bringToTop(this.right);
   }
 
   update() {
-	const input = this.cursors;
-    this.guy.setRotation(0);
     this.checkLeave();
-    var scaleVal = this.guy.y - minY;
-    var scaleRatio = baseScale + (scaleVal / diffY) * scalingDif * textureScale;
-    if (this.guy.scale < 0) {
-      this.guy.setScale(-scaleRatio, scaleRatio);
-    } else {
-      this.guy.setScale(scaleRatio, scaleRatio);
-    }
-    if (input.left.isDown) {
-      this.swingDone = false;
-      this.watchLook = false;
-      this.guy.anims.play("walk", true);
-      this.guy.setVelocityX(-((this.guy.y * speedScale - 1.6) / minY));
-
-      if (!input.right.isDown) {
-        this.guy.flipX = true;
-        //this.guy.setScale(-this.guy.scale., this.guy.scale);
-      }
-    }
-    if (input.right.isDown) {
-      this.swingDone = false;
-      this.watchLook = false;
-      this.guy.anims.play("walk", true);
-      this.guy.setVelocityX((this.guy.y * speedScale - 1.6) / minY);
-
-      if (!input.left.isDown) {
-        this.guy.flipX = false;
-      }
-    }
-    if (input.up.isDown) {
-      this.swingDone = false;
-      this.watchLook = false;
+    const input = this.cursors;
+    var scaleChange = this.guy.move(input);
+    if(scaleChange){
       this.checkScale();
-      this.guy.anims.play("walk", true);
-      this.guy.setVelocityY(-((ySpeed * this.guy.y) / minY));
-    }
-    if (input.down.isDown) {
-      this.swingDone = false;
-      this.watchLook = false;
-      this.checkScale();
-      this.guy.anims.play("walk", true);
-      this.guy.setVelocityY((ySpeed * this.guy.y) / minY);
-    }
-    if (input.down.isUp && input.up.isUp) {
-      this.guy.setVelocityY(0);
-      if (input.left.isUp && input.right.isUp) {
-        if(!this.swingDone){
-          this.guy.anims.play("blink", true);
-          this.swingDone = true;
-        } else {
-          if(!this.guy.anims.isPlaying && !this.watchLook){
-            this.watchLook = true;
-            this.guy.anims.play("stand3", true);
-          }
-        }
-      }
-    }
-    if (input.left.isUp && input.right.isUp) {
-      this.guy.setVelocityX(0);
     }
 
     handleCollision(this, this.rich);
   }
 
   checkScale() {
-    if (this.guy.y > 528) {
-      this.children.bringToTop(this.guy);
-    } else if (this.guy.y > 500) {
-      this.children.bringToTop(this.guy);
+    if (this.guy.sprite.y > 528) {
+      this.children.bringToTop(this.guy.sprite);
+    } else if (this.guy.sprite.y > 500) {
+      this.children.bringToTop(this.guy.sprite);
       this.children.bringToTop(this.right);
-    } else if (this.guy.y > 446) {
-      this.children.bringToTop(this.guy);
+    } else if (this.guy.sprite.y > 446) {
+      this.children.bringToTop(this.guy.sprite);
       this.children.bringToTop(this.right);
       this.children.bringToTop(this.left);
     } else {
@@ -262,7 +144,7 @@ export default class Coffee extends ControllableScene {
     }
   }
   checkLeave() {
-    if (this.guy.x < 200 && this.guy.y > 500) {
+    if (this.guy.sprite.x < 200 && this.guy.sprite.y > 500) {
 		this.changeScene(SceneKeys.HOTEL);
 	}
   }

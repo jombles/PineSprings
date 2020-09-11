@@ -4,6 +4,7 @@ import SceneKeys from './sceneKeys';
 const world = require("../assets/world.json");
 const innJ = require("../assets/inn.json");
 const innC = require("../assets/inn.jpg");
+import Guy from '../characters/Guy';
 //const frontC = require("./assets/outside-coffee-shop-full-front.png");
 //const leftC = require("./assets/outside-coffee-shop-left-rail.png");
 //const rightC = require("./assets/outside-coffee-shop-right-rail.png");
@@ -67,85 +68,16 @@ export default class Hotel extends ControllableScene {
     this.back.setPosition(this.back.displayOriginX, this.back.displayOriginY);
 
     //this.front.setScale(800 / this.front.width, 600 / this.front.height);
-    this.guy = this.matter.add.sprite(0, 0, "guy", 0, {
-      shape: objects.guy
-    });
-    this.guy.setOrigin(0.5, 1);
-    this.guy.body.inertia = Infinity;
-    // console.log("second scale: " + this.guy.width);
-    //this.matter.world.renderBodyBounds(back.body);
-    //this.matter.Body.setStatic(back.body,true);
-    //console.log(back.body);
-    this.guy.setPosition(
-      600 + this.guy.centerOfMass.x,
-      700 + this.guy.centerOfMass.y
-    );
-    this.anims.create({
-      key: "walk",
-      frames: this.anims.generateFrameNumbers("guy", { start: 2, end: 9 }),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    this.anims.create({
-      key: "stand",
-      frames: this.anims.generateFrameNumbers("guy", { start: 0, end: 1 }),
-      frameRate: 1,
-      repeat: -1
-    });
+    this.guy = new Guy(this, 1, 600, 700);
   }
 
   update() {
-	const input = this.cursors;
-	this.checkLeave();
-    this.guy.setRotation(0);
-    var scaleVal = this.guy.y - minY;
-    var scaleRatio = baseScale + (scaleVal / diffY) * scalingDif * textureScale;
-    if (this.guy.scale < 0) {
-      this.guy.setScale(-scaleRatio, scaleRatio);
-    } else {
-      this.guy.setScale(scaleRatio, scaleRatio);
-    }
-    if (input.left.isDown) {
-      this.guy.anims.play("walk", true);
-      this.guy.setVelocityX(-((this.guy.y * speedScale - 1.6) / minY));
-
-      if (!input.right.isDown) {
-        this.guy.flipX = true;
-        //this.guy.setScale(-this.guy.scale., this.guy.scale);
-      }
-    }
-    if (input.right.isDown) {
-      this.guy.anims.play("walk", true);
-      this.guy.setVelocityX((this.guy.y * speedScale - 1.6) / minY);
-
-      if (!input.left.isDown) {
-        this.guy.flipX = false;
-      }
-    }
-    if (input.up.isDown) {
+    this.checkLeave();
+    const input = this.cursors;
+    var scaleChange = this.guy.move(input);
+    if(scaleChange){
       this.checkScale();
-      this.guy.anims.play("walk", true);
-      this.guy.setVelocityY(-((ySpeed * this.guy.y) / minY));
     }
-    if (input.down.isDown) {
-      this.checkScale();
-      this.guy.anims.play("walk", true);
-      this.guy.setVelocityY((ySpeed * this.guy.y) / minY);
-    }
-    if (input.down.isUp && input.up.isUp) {
-      this.guy.setVelocityY(0);
-      if (input.left.isUp && input.right.isUp) {
-        this.guy.anims.play("stand", true);
-      }
-    }
-    if (input.left.isUp && input.right.isUp) {
-      this.guy.setVelocityX(0);
-    }
-
-    const character = {
-      getName: () => "Guy"
-    };
   }
 
   /* Richard Callbacks
@@ -186,7 +118,7 @@ export default class Hotel extends ControllableScene {
   }
 
   checkLeave() {
-    if (this.guy.x < 200 && this.guy.y > 500) {
+    if (this.guy.sprite.x < 200 && this.guy.sprite.y > 500) {
 		this.changeScene(SceneKeys.COFFEE);
 
 	}
