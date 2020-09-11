@@ -9,12 +9,18 @@ const baseScale = 0.3;
 const ySpeed = 0.5;
 const speedScale = 2.6;
 
+
 export default class Guy extends Character {
-  constructor(scene, scale, locX, locY) {
+  constructor(scene, locX, locY, SI) {
     super("Guy");
     this.completedQuests = {};
     this.swingDone = false;
     this.watchLook = false;
+
+    this.minY = SI["minY"];
+    this.maxY = SI["maxY"];
+    this.close = SI["close"];
+    this.far = SI["far"];
 
     const objects = scene.cache.json.get("objects");
 
@@ -23,7 +29,8 @@ export default class Guy extends Character {
     });
     this.sprite.setOrigin(0.5, 1);
     this.sprite.body.inertia = Infinity;
-    this.sprite.setScale(scale / this.sprite.width, scale / this.sprite.width);
+    //this.sprite.setScale(this.sprite.width, this.sprite.width);
+    console.log("WIDTH: "+this.sprite.width);
     scene.characters.guy = this.sprite;
 
     this.sprite.setPosition(
@@ -81,9 +88,35 @@ export default class Guy extends Character {
     return this.completedQuests[questId];
   }
 
+  calcScale(){
+    var spriteY = this.sprite.y - this.minY;
+    var diffY = this.maxY - this.minY;
+    var locY = diffY - spriteY;
+    var yRatio = locY / diffY;
+
+    var area = this.far - this.close;
+    var linearLoc = (area * yRatio);
+
+    var worldLoc = ((linearLoc * linearLoc)/area);
+
+    var scalar = -0.0231 * (worldLoc + this.close) + 1.639;
+    //console.log(worldLoc);
+
+    //console.log(scalar);
+
+    //return 28.8/(worldLoc + 12);
+    return scalar; 
+
+
+    //console.log("Location: " + worldLoc);
+
+    //return 0.4;
+  }
+
   move(input, scale){
     var scaleChange = false;
     this.sprite.setRotation(0);
+    /*
     var scaleVal = this.sprite.y - minY;
     var scaleRatio = baseScale + (scaleVal / diffY) * scalingDif * textureScale;
     if (this.sprite.scale < 0) {
@@ -91,11 +124,21 @@ export default class Guy extends Character {
     } else {
       this.sprite.setScale(scaleRatio, scaleRatio);
     }
+    */
+    //console.log(scaleRatio);
+
+    var scaleVal = this.calcScale();
+    if (this.sprite.scale < 0) {
+      this.sprite.setScale(-scaleVal, scaleVal);
+    } else {
+      this.sprite.setScale(scaleVal, scaleVal);
+    }
     if (input.left.isDown) {
       this.swingDone = false;
       this.watchLook = false;
       this.sprite.anims.play("walk", true);
-      this.sprite.setVelocityX(-((this.sprite.y * speedScale - 1.6) / minY));
+      //this.sprite.setVelocityX(-((this.sprite.y * speedScale - 1.6) / minY));
+      this.sprite.setVelocityX(-4 * scaleVal);
 
       if (!input.right.isDown) {
         this.sprite.flipX = true;
@@ -106,7 +149,8 @@ export default class Guy extends Character {
       this.swingDone = false;
       this.watchLook = false;
       this.sprite.anims.play("walk", true);
-      this.sprite.setVelocityX((this.sprite.y * speedScale - 1.6) / minY);
+      this.sprite.setVelocityX(4 * scaleVal );
+      console.log((this.sprite.y * speedScale - 1.6) / minY);
 
       if (!input.left.isDown) {
         this.sprite.flipX = false;
@@ -117,14 +161,15 @@ export default class Guy extends Character {
       this.watchLook = false;
       scaleChange = true;
       this.sprite.anims.play("walk", true);
-      this.sprite.setVelocityY(-((ySpeed * this.sprite.y) / minY));
+      //this.sprite.setVelocityY(-((ySpeed * this.sprite.y) / minY));
+      this.sprite.setVelocityY(-(this.maxY - this.minY)/300 * scaleVal);
     }
     if (input.down.isDown) {
       this.swingDone = false;
       this.watchLook = false;
       scaleChange = true;
       this.sprite.anims.play("walk", true);
-      this.sprite.setVelocityY((ySpeed * this.sprite.y) / minY);
+      this.sprite.setVelocityY((this.maxY - this.minY)/300 *scaleVal);
     }
     if (input.down.isUp && input.up.isUp) {
       this.sprite.setVelocityY(0);

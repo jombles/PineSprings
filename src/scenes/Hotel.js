@@ -17,6 +17,12 @@ const textureScale = 0.15;
 const baseScale = 0.1;
 const ySpeed = 0.5;
 const speedScale = 2.6;
+const scaleInfo = {
+  "minY":637,
+  "maxY":830,
+  "close":15,
+  "far":60,
+}
 
 export default class Hotel extends ControllableScene {
   constructor() {
@@ -68,7 +74,10 @@ export default class Hotel extends ControllableScene {
     this.back.setPosition(this.back.displayOriginX, this.back.displayOriginY);
 
     //this.front.setScale(800 / this.front.width, 600 / this.front.height);
-    this.guy = new Guy(this, 1, 600, 700);
+    this.guy = new Guy(this, 600, 700, scaleInfo);
+    this.guy.calcScale();
+    this.children.bringToTop(this.guy.sprite);
+    //console.log(this.guy.sprite.y);
   }
 
   update() {
@@ -78,6 +87,7 @@ export default class Hotel extends ControllableScene {
     if(scaleChange){
       this.checkScale();
     }
+    console.log(this.guy.sprite.y);
   }
 
   /* Richard Callbacks
