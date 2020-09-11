@@ -138,7 +138,7 @@ const handleCollision = (scene, npc) => {
 
   scene.matter.overlap(
     npc.sprite,
-    [scene.guy],
+    [scene.guy.sprite],
     onCollideCallback,
     processCallback
   );

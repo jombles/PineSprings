@@ -20,7 +20,7 @@ export default class Richard extends Character {
       this.sprite.scale * 0.7,
       this.sprite.scale * 0.7
     );
-    scene.anims.create({
+    scene.anims.create({ 
       key: "chill",
       frames: scene.anims.generateFrameNumbers("richard", {
         start: 0,
