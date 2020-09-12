@@ -31,6 +31,11 @@ export default class Coffee extends ControllableScene {
    	 super(SceneKeys.COFFEE);
   }
 
+  init(data){
+    this.inX = data.x;
+    this.inY = data.y;
+  }
+
   preload() {
 	super.preload();
     this.dialog = false;
@@ -123,7 +128,7 @@ export default class Coffee extends ControllableScene {
     );
     this.door.alpha = 0;
     this.children.bringToTop(this.door);
-    this.guy = new Guy(this, 600, 500, scaleInfo);
+    this.guy = new Guy(this, this.inX, this.inY, scaleInfo);
 
     this.children.bringToTop(this.right);
 
@@ -164,8 +169,8 @@ export default class Coffee extends ControllableScene {
     }
   }
   checkLeave() {
-    if (this.guy.sprite.x < 200 && this.guy.sprite.y > 500) {
-		this.changeScene(SceneKeys.HOTEL);
+    if (this.guy.sprite.x < 100 && this.guy.sprite.y > 450) {
+		this.changeScene(SceneKeys.HOTEL, {x: 1100, y: 670});
 	}
   }
 
@@ -184,7 +189,7 @@ export default class Coffee extends ControllableScene {
         }
       }
       if(input.action.isDown && this.doorActive){
-        this.changeScene(SceneKeys.DINER);
+        this.changeScene(SceneKeys.DINER, {x:175,y:625});
       }
   }
 }
