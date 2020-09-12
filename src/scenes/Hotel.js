@@ -18,10 +18,10 @@ const baseScale = 0.1;
 const ySpeed = 0.5;
 const speedScale = 2.6;
 const scaleInfo = {
-  "minY":637,
+  "minY":632,
   "maxY":830,
-  "close":15,
-  "far":60,
+  "close":34,
+  "far":99,
 }
 
 export default class Hotel extends ControllableScene {

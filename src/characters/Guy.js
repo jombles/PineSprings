@@ -95,12 +95,14 @@ export default class Guy extends Character {
     var yRatio = locY / diffY;
 
     var area = this.far - this.close;
-    var linearLoc = (area * yRatio);
+    var linearLoc = (area * yRatio) + this.close;
 
-    var worldLoc = ((linearLoc * linearLoc)/area);
+    var worldLoc = ((linearLoc * linearLoc)/this.far);
 
-    var scalar = -0.0231 * (worldLoc + this.close) + 1.639;
-    //console.log(worldLoc);
+    var scalar = -0.01565 * (worldLoc) + 1.7252;
+    //console.log(this.sprite.y);
+
+    //console.log(this.sprite.scale);
 
     //console.log(scalar);
 
@@ -138,7 +140,7 @@ export default class Guy extends Character {
       this.watchLook = false;
       this.sprite.anims.play("walk", true);
       //this.sprite.setVelocityX(-((this.sprite.y * speedScale - 1.6) / minY));
-      this.sprite.setVelocityX(-4 * scaleVal);
+      this.sprite.setVelocityX(-3.7 * Math.pow(scaleVal, 0.9));
 
       if (!input.right.isDown) {
         this.sprite.flipX = true;
@@ -149,8 +151,8 @@ export default class Guy extends Character {
       this.swingDone = false;
       this.watchLook = false;
       this.sprite.anims.play("walk", true);
-      this.sprite.setVelocityX(4 * scaleVal );
-      console.log((this.sprite.y * speedScale - 1.6) / minY);
+      this.sprite.setVelocityX(3.7 * Math.pow(scaleVal, 0.9));
+      console.log(3.6 * Math.pow(scaleVal, 1.1));
 
       if (!input.left.isDown) {
         this.sprite.flipX = false;
@@ -162,14 +164,14 @@ export default class Guy extends Character {
       scaleChange = true;
       this.sprite.anims.play("walk", true);
       //this.sprite.setVelocityY(-((ySpeed * this.sprite.y) / minY));
-      this.sprite.setVelocityY(-(this.maxY - this.minY)/300 * scaleVal);
+      this.sprite.setVelocityY(-((this.maxY - this.minY)/(this.far - this.close) * Math.pow(scaleVal, 1.6)) / 4);
     }
     if (input.down.isDown) {
       this.swingDone = false;
       this.watchLook = false;
       scaleChange = true;
       this.sprite.anims.play("walk", true);
-      this.sprite.setVelocityY((this.maxY - this.minY)/300 *scaleVal);
+      this.sprite.setVelocityY(((this.maxY - this.minY)/(this.far - this.close) * Math.pow(scaleVal, 1.6)) / 4);
     }
     if (input.down.isUp && input.up.isUp) {
       this.sprite.setVelocityY(0);
