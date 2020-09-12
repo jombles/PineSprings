@@ -7,9 +7,9 @@ export default class BootScene extends Phaser.Scene {
 	}
   create() {
 	  this.scene.launch(SceneKeys.UI);
-	  this.scene.launch(SceneKeys.COFFEE); // The starting scene
+	  this.scene.launch(SceneKeys.FIGHT); // The starting scene
 
-	  this.scene.moveAbove(SceneKeys.COFFEE, SceneKeys.UI);
+	  this.scene.moveAbove(SceneKeys.FIGHT, SceneKeys.UI);
 	  this.scene.remove(SceneKeys.BOOT);
   }
 }

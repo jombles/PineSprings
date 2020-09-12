@@ -10,12 +10,15 @@ const ySpeed = 0.5;
 const speedScale = 2.6;
 
 
-export default class Guy extends Character {
+export default class FightGuy extends Character {
   constructor(scene, locX, locY, SI) {
-    super("Guy");
+    super("FightGuy");
+    this.left = true;
     this.completedQuests = {};
     this.swingDone = false;
     this.watchLook = false;
+    this.blocking = false;
+    this.punchX = 60;
 
     this.minY = SI["minY"];
     this.maxY = SI["maxY"];
@@ -24,8 +27,8 @@ export default class Guy extends Character {
 
     const objects = scene.cache.json.get("objects");
 
-    this.sprite = scene.matter.add.sprite(0, 0, "guy", 0, {
-      shape: objects.guy
+    this.sprite = scene.matter.add.sprite(0, 0, "fightGuy", 0, {
+      shape: objects.fightGuyFeet
     });
     this.sprite.setOrigin(0.5, 1);
     this.sprite.body.inertia = Infinity;
@@ -38,20 +41,64 @@ export default class Guy extends Character {
       locY + this.sprite.centerOfMass.y
     );
 
-    scene.anims.create({
-      key: "walk",
-      frames: scene.anims.generateFrameNumbers("guy", { start: 2, end: 9 }),
-      frameRate: 10,
-      repeat: -1
+    this.guyHit = scene.matter.add.sprite(0, 0, "empty", 0, {
+        shape: objects.fightGuy,
+        isStatic: true
+      });
+    this.guyHit.x = this.sprite.x;
+    this.guyHit.y = this.sprite.y - 130;
+    this.guyHit.alpha = 0;
+    this.punchBox = scene.matter.add.sprite(0, 0, "empty", 0, {
+        shape: objects.punchBox,
+        isStatic: false
     });
+    this.punchBox.x = this.sprite.x + this.punchX;
+    this.punchBox.y = this.sprite.y - 130;
+    this.punchBox.alpha = 0;
+    this.guyHit.setCollidesWith(8);
+    this.guyHit.setCollisionCategory(2);
+    this.punchBox.setCollidesWith(16);
+    this.punchBox.setCollisionCategory(32);
+    this.sprite.setCollidesWith(1);
+    this.inPunch = false;
 
     scene.anims.create({
-      key: "stand1",
-      frames: scene.anims.generateFrameNumbers("guy-idle", { start: 0, end: 0 }),
+      key: "pose",
+      frames: scene.anims.generateFrameNumbers("fightGuy", { start: 0, end: 0 }),
       frameRate: 1,
       repeat: -1
     });
+    scene.anims.create({
+        key: "block",
+        frames: scene.anims.generateFrameNumbers("blockGuy", { start: 0, end: 0 }),
+        frameRate: 1,
+        repeat: -1
+      });
 
+    scene.anims.create({
+      key: "startPunch",
+      frames: scene.anims.generateFrameNumbers("fightGuy", { frames:[3,4,5,6,7,7,7] }),
+      frameRate: 40,
+      repeat: 0
+    });
+    scene.anims.create({
+        key: "endPunch",
+        frames: scene.anims.generateFrameNumbers("fightGuy", { frames:[7,7,8,9,2,0] }),
+        frameRate: 40,
+        repeat: 0
+      });
+
+      this.sprite.on(Phaser.Animations.Events.SPRITE_ANIMATION_KEY_UPDATE + "startPunch", function(animation, frame, gameObject) {
+
+      
+        if(frame.index === 7) {
+           // Add vertical force
+           console.log("punching...");
+           this.inPunch = true;	
+           this.sprite.anims.play("endPunch", false);
+        }
+      }, this);
+/*
     scene.anims.create({
       key: "stand2",
       frames: scene.anims.generateFrameNumbers("guy-idle", { start: 0, end: 3 }),
@@ -80,8 +127,17 @@ export default class Guy extends Character {
       frameRate: 15,
       repeat: 0
     });
+    */
 
 
+  }
+
+
+  updateHitboxes(){
+    this.guyHit.x = this.sprite.x;
+    this.guyHit.y = this.sprite.y - 135;
+    this.punchBox.x = this.sprite.x + this.punchX;
+    this.punchBox.y = this.sprite.y - 130;
   }
 
   hasCompletedQuest(questId) {
@@ -130,65 +186,80 @@ export default class Guy extends Character {
     //console.log(scaleRatio);
 
     var scaleVal = this.calcScale();
-    if (this.sprite.scale < 0) {
-      this.sprite.setScale(-scaleVal, scaleVal);
+    if (this.left == true) {
+        this.sprite.flipX = false;
+        this.punchX = 60;
+      //this.sprite.setScale(-this.sprite.width, this.sprite.width);
     } else {
-      this.sprite.setScale(scaleVal, scaleVal);
+        this.sprite.flipX = true;
+        this.punchX = -60;
+        //this.sprite.setScale(1, 1);
     }
     if (input.left.isDown) {
       this.swingDone = false;
       this.watchLook = false;
-      this.sprite.anims.play("walk", true);
+      this.sprite.anims.play("pose", true);
       //this.sprite.setVelocityX(-((this.sprite.y * speedScale - 1.6) / minY));
-      this.sprite.setVelocityX(-3.7 * Math.pow(scaleVal, 0.9));
+      this.sprite.setVelocityX(-3);
 
       if (!input.right.isDown) {
-        this.sprite.flipX = true;
+        //this.sprite.flipX = true;
         //this.guy.setScale(-this.guy.scale., this.guy.scale);
       }
     }
     if (input.right.isDown) {
       this.swingDone = false;
       this.watchLook = false;
-      this.sprite.anims.play("walk", true);
-      this.sprite.setVelocityX(3.7 * Math.pow(scaleVal, 0.9));
-      console.log(3.6 * Math.pow(scaleVal, 1.1));
+      this.sprite.anims.play("pose", true);
+      this.sprite.setVelocityX(3);
+      //console.log(3.6 * Math.pow(scaleVal, 1.1));
 
       if (!input.left.isDown) {
-        this.sprite.flipX = false;
+        //this.sprite.flipX = false;
       }
     }
     if (input.up.isDown) {
       this.swingDone = false;
       this.watchLook = false;
       scaleChange = true;
-      this.sprite.anims.play("walk", true);
+      this.sprite.anims.play("pose", true);
       //this.sprite.setVelocityY(-((ySpeed * this.sprite.y) / minY));
-      this.sprite.setVelocityY(-((this.maxY - this.minY)/(this.far - this.close) * Math.pow(scaleVal, 1.6)) / 4);
+      this.sprite.setVelocityY(-1);
     }
     if (input.down.isDown) {
       this.swingDone = false;
       this.watchLook = false;
       scaleChange = true;
-      this.sprite.anims.play("walk", true);
-      this.sprite.setVelocityY(((this.maxY - this.minY)/(this.far - this.close) * Math.pow(scaleVal, 1.6)) / 4);
+      this.sprite.anims.play("pose", true);
+      this.sprite.setVelocityY(1);
     }
     if (input.down.isUp && input.up.isUp) {
       this.sprite.setVelocityY(0);
       if (input.left.isUp && input.right.isUp) {
         if(!this.swingDone){
-          this.sprite.anims.play("blink", true);
+          this.sprite.anims.play("pose", true);
           this.swingDone = true;
         } else {
           if(!this.sprite.anims.isPlaying && !this.watchLook){
             this.watchLook = true;
-            this.sprite.anims.play("stand3", true);
+            //this.sprite.anims.play("stand3", true);
           }
         }
       }
     }
     if (input.left.isUp && input.right.isUp) {
       this.sprite.setVelocityX(0);
+    }
+    if (input.action.isDown){
+        this.sprite.anims.play("startPunch", false);
+    }
+    if (input.altAction.isDown){
+        this.sprite.anims.play("block", false);
+        this.blocking = true;
+    }
+    if(this.blocking == true && input.altAction.isUp){
+        this.blocking = false;
+        this.sprite.anims.play("pose", true);
     }
     return scaleChange;
   }

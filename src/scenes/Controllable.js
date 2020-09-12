@@ -5,7 +5,9 @@ export default class ControllableScene extends BaseScene {
 			up: Phaser.Input.Keyboard.KeyCodes.W,
 			down: Phaser.Input.Keyboard.KeyCodes.S,
 			left: Phaser.Input.Keyboard.KeyCodes.A,
-			right: Phaser.Input.Keyboard.KeyCodes.D
+			right: Phaser.Input.Keyboard.KeyCodes.D,
+			action: Phaser.Input.Keyboard.KeyCodes.COMMA,
+			altAction: Phaser.Input.Keyboard.KeyCodes.PERIOD
 		});
 	}
 }

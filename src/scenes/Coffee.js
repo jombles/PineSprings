@@ -149,6 +149,9 @@ export default class Coffee extends ControllableScene {
   checkLeave() {
     if (this.guy.sprite.x < 200 && this.guy.sprite.y > 500) {
 		this.changeScene(SceneKeys.HOTEL);
-	}
+  }
+  if (this.guy.sprite.x > 1150 && this.guy.sprite.y > 530) {
+		this.changeScene(SceneKeys.FIGHT);
+  }
   }
 }
