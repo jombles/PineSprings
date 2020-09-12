@@ -3,7 +3,10 @@ import SceneKeys from './sceneKeys';
 //import Richard from "./characters/npcs/Richard";
 const world = require("../assets/world.json");
 const innJ = require("../assets/inn.json");
-const dinerC = require("../assets/diner.jpg");
+const dinerOffC = require("../assets/diner.jpg");
+const dinerC = require("../assets/inside-diner-color.png");
+const lightC = require("../assets/inside-diner-light.png");
+const lighthC = require("../assets/inside-diner-light-h.png");
 const door = require("../assets/inside-diner-door-highlight.png");
 import Guy from '../characters/Guy';
 //const frontC = require("./assets/outside-coffee-shop-full-front.png");
@@ -31,12 +34,20 @@ export default class Diner extends ControllableScene {
     super(SceneKeys.DINER);
   }
 
+  init(data){
+    this.inX = data.x;
+    this.inY = data.y;
+  }
+
   preload() {
 	super.preload();
     this.dialog = false;
     this.guy = null;
     this.characters = {};
     this.load.image("backDiner", dinerC);
+    this.load.image("backDinerOff", dinerOffC);
+    this.load.image("light", lightC);
+    this.load.image("lightH", lighthC);
     this.load.image("insideDoor", door);
     this.back = null;
     this.left = null;
@@ -44,6 +55,8 @@ export default class Diner extends ControllableScene {
     this.front = null;
     this.soundTrigger = false;
     this.doorActive = false;
+    this.lightActive = false;
+    this.lightTriggered = false;
 
     this.load.spritesheet("guy", guyImg, {
       frameWidth: 125,
@@ -76,8 +89,16 @@ export default class Diner extends ControllableScene {
       // position: { x: 0, y: 0 }
     });
     */
+   this.altBack = this.add.image(0, 0, "backDinerOff");
+   this.altBack.setPosition(this.altBack.displayOriginX, this.altBack.displayOriginY);
+   this.altBack.alpha = 0;
    this.back = this.add.image(0, 0, "backDiner");
     this.back.setPosition(this.back.displayOriginX, this.back.displayOriginY);
+    this.lightH = this.add.image(0, 0, "lightH");
+     this.lightH.setPosition(this.lightH.displayOriginX, this.lightH.displayOriginY);
+     this.lightH.alpha = 0;
+    this.light = this.add.image(0, 0, "light");
+     this.light.setPosition(this.light.displayOriginX, this.light.displayOriginY);
 
     this.door = this.add.image(0, 0, "insideDoor");
     this.door.setPosition(
@@ -87,7 +108,7 @@ export default class Diner extends ControllableScene {
     this.door.alpha = 0;
 
     //this.front.setScale(800 / this.front.width, 600 / this.front.height);
-    this.guy = new Guy(this, 175, 625, scaleInfo);
+    this.guy = new Guy(this, this.inX, this.inY, scaleInfo);
     this.guy.calcScale();
     this.children.bringToTop(this.guy.sprite);
     //console.log(this.guy.sprite.y);
@@ -102,6 +123,7 @@ export default class Diner extends ControllableScene {
     }
 
     this.handleDoorHighlight(input);
+    this.handleLightHighlight(input);
     
     if(debug){
         console.log("x: " + this.guy.sprite.x);
@@ -124,8 +146,42 @@ export default class Diner extends ControllableScene {
       }
     }
     if(input.action.isDown && this.doorActive){
-      this.changeScene(SceneKeys.COFFEE);
+      this.changeScene(SceneKeys.COFFEE, {x:820,y:475});
     }
+}
+
+handleLightHighlight(input){
+
+  if(this.guy.sprite.x < 380 && this.guy.sprite.x > 300 && this.guy.sprite.y < 585){
+    if(!this.lightActive){
+      this.light.alpha = 0;
+      this.lightH.alpha = 1;
+      this.lightActive = true;
+    }
+  } else {
+    if(this.lightActive){
+      this.light.alpha = 1;
+      this.lightH.alpha = 0;
+      this.lightActive = false;
+    }
+  }
+  if(input.action.isDown && this.lightActive && this.lightTriggered == false){
+    this.lightTriggered = true;
+    if(this.back.alpha != 0){
+      this.back.alpha = 0;
+      this.altBack.alpha = 1;
+      console.log("OFF");
+    } else {
+      this.back.alpha = 1;
+      this.altBack.alpha = 0;
+      console.log("ON");
+    }
+  }
+  if(input.action.isUp){
+    if(this.lightTriggered){
+      this.lightTriggered = false;
+    }
+  }
 }
 
   checkScale() {

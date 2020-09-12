@@ -8,8 +8,8 @@ var dialogProgress = {};
 
 export default class BaseScene extends Phaser.Scene {
 
-	changeScene(newSceneKey) {
-		this.scene.start(newSceneKey);
+	changeScene(newSceneKey, data) {
+		this.scene.start(newSceneKey, data);
 		this.scene.stop(this.scene.key);
 	}
 

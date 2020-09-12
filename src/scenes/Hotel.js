@@ -23,10 +23,16 @@ const scaleInfo = {
   "close":34,
   "far":99,
 }
+const debug = true;
 
 export default class Hotel extends ControllableScene {
   constructor() {
     super(SceneKeys.HOTEL);
+  }
+
+  init(data){
+    this.inX = data.x;
+    this.inY = data.y;
   }
 
   preload() {
@@ -74,7 +80,7 @@ export default class Hotel extends ControllableScene {
     this.back.setPosition(this.back.displayOriginX, this.back.displayOriginY);
 
     //this.front.setScale(800 / this.front.width, 600 / this.front.height);
-    this.guy = new Guy(this, 600, 700, scaleInfo);
+    this.guy = new Guy(this, this.inX, this.inY, scaleInfo);
     this.guy.calcScale();
     this.children.bringToTop(this.guy.sprite);
     //console.log(this.guy.sprite.y);
@@ -86,6 +92,11 @@ export default class Hotel extends ControllableScene {
     var scaleChange = this.guy.move(input);
     if(scaleChange){
       this.checkScale();
+    }
+
+    if(debug){
+      console.log("x: " + this.guy.sprite.x);
+      console.log("y: " + this.guy.sprite.y);
     }
   }
 
@@ -127,8 +138,8 @@ export default class Hotel extends ControllableScene {
   }
 
   checkLeave() {
-    if (this.guy.sprite.x < 200 && this.guy.sprite.y > 500) {
-		this.changeScene(SceneKeys.COFFEE);
+    if (this.guy.sprite.x > 1200 && this.guy.sprite.y < 680) {
+		this.changeScene(SceneKeys.COFFEE, {x: 160, y:530});
 
 	}
   }
