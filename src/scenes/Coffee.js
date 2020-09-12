@@ -16,14 +16,11 @@ const richardImg = require("../assets/richard-large.png");
 //const lofi3 = require("./assets/music/longform003.mp3");
 //const lofi4 = require("./assets/music/longform004.mp3");
 const scaleInfo = {
-  "minY":400,
-  "maxY":777,
-  "close":6,
-  "far":60,
+  "minY":405,
+  "maxY":778.2,
+  "close":8.0,
+  "far":100,
 }
-
-const maxDist = 60;
-const minDist = 6;
 
 
 
