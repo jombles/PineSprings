@@ -8,6 +8,7 @@ const backC = require("../assets/outside-coffee-shop.jpg");
 const frontC = require("../assets/outside-coffee-shop-full-front.png");
 const leftC = require("../assets/outside-coffee-shop-left-rail.png");
 const rightC = require("../assets/outside-coffee-shop-right-rail.png");
+const door = require("../assets/outside-coffee-shop-door-highlight.png");
 const guyImg = require("../assets/main-guy-large.png");
 const guyIdleImg = require("../assets/guy-idle-large.png");
 const guyBlinkImg = require("../assets/guy-blink-large.png");
@@ -21,6 +22,7 @@ const scaleInfo = {
   "close":8.0,
   "far":100,
 }
+const debug = false;
 
 
 
@@ -38,10 +40,12 @@ export default class Coffee extends ControllableScene {
     this.load.image("left", leftC);
     this.load.image("front", frontC);
     this.load.image("back", backC);
+    this.load.image("door", door);
     this.back = null;
     this.left = null;
     this.right = null;
     this.front = null;
+    this.doorActive = false;
 
     this.wantsChange = false;
     this.soundTrigger = false;
@@ -72,6 +76,7 @@ export default class Coffee extends ControllableScene {
   }
 
   create() {
+
     //this.matter.world.setBounds(0, 0, 800, 600);
     var objects = this.cache.json.get("objects");
     //console.log(objects.back);
@@ -111,6 +116,13 @@ export default class Coffee extends ControllableScene {
       this.front.displayOriginX,
       this.front.displayOriginY
     );
+    this.door = this.add.image(0, 0, "door");
+    this.door.setPosition(
+      this.door.displayOriginX,
+      this.door.displayOriginY
+    );
+    this.door.alpha = 0;
+    this.children.bringToTop(this.door);
     this.guy = new Guy(this, 600, 500, scaleInfo);
 
     this.children.bringToTop(this.right);
@@ -126,8 +138,13 @@ export default class Coffee extends ControllableScene {
     if(scaleChange){
       this.checkScale();
     }
+    this.handleDoorHighlight(input);
 
     handleCollision(this, this.rich);
+    if(debug){
+      console.log("x: " + this.guy.sprite.x);
+      console.log("y: " + this.guy.sprite.y);
+    }
   }
 
   checkScale() {
@@ -150,5 +167,24 @@ export default class Coffee extends ControllableScene {
     if (this.guy.sprite.x < 200 && this.guy.sprite.y > 500) {
 		this.changeScene(SceneKeys.HOTEL);
 	}
+  }
+
+
+  handleDoorHighlight(input){
+
+      if(this.guy.sprite.x < 890 && this.guy.sprite.x > 750 && this.guy.sprite.y < 480){
+        if(!this.doorActive){
+          this.door.alpha = 1;
+          this.doorActive = true;
+        }
+      } else {
+        if(this.doorActive){
+          this.door.alpha = 0;
+          this.doorActive = false;
+        }
+      }
+      if(input.action.isDown && this.doorActive){
+        this.changeScene(SceneKeys.DINER);
+      }
   }
 }

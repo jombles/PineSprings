@@ -3,4 +3,5 @@ export default {
 	COFFEE: "coffee",
 	HOTEL: "hotel",
 	UI: "ui",
+	DINER: "diner"
 };

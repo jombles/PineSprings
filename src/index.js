@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import Boot from "./scenes/Boot.js";
 import Coffee from "./scenes/Coffee.js";
 import Hotel from "./scenes/Hotel.js";
+import Diner from "./scenes/Diner.js";
 import UI from './scenes/UI';
 
 const config = {
@@ -10,7 +11,7 @@ const config = {
   height: 1500,
   backgroundColor: "#000c1f",
   parent: "game",
-  scene: [Boot, UI, Coffee, Hotel],
+  scene: [Boot, UI, Coffee, Hotel, Diner],
   physics: {
     default: "matter",
     matter: {
