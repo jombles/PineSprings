@@ -8,6 +8,7 @@ const backC = require("../assets/outside-coffee-shop.jpg");
 const frontC = require("../assets/outside-coffee-shop-full-front.png");
 const leftC = require("../assets/outside-coffee-shop-left-rail.png");
 const rightC = require("../assets/outside-coffee-shop-right-rail.png");
+const empty = require("../assets/emptySprite.jpg");
 const door = require("../assets/outside-coffee-shop-door-highlight.png");
 const guyImg = require("../assets/main-guy-large.png");
 const guyIdleImg = require("../assets/guy-idle-large.png");
@@ -46,11 +47,13 @@ export default class Coffee extends ControllableScene {
     this.load.image("front", frontC);
     this.load.image("back", backC);
     this.load.image("door", door);
+    this.load.image("empty", empty);
     this.back = null;
     this.left = null;
     this.right = null;
     this.front = null;
     this.doorActive = false;
+    this.layers = [];
 
     this.wantsChange = false;
     this.soundTrigger = false;
@@ -127,13 +130,22 @@ export default class Coffee extends ControllableScene {
       this.door.displayOriginY
     );
     this.door.alpha = 0;
+
+    this.front.depth = 2;
+    this.left.depth = 4;
+    this.right.depth = 6;
+    this.layers.push(this.front);
+    this.layers.push(this.left);
+    this.layers.push(this.right);
+
     this.children.bringToTop(this.door);
     this.guy = new Guy(this, this.inX, this.inY, scaleInfo);
 
-    this.children.bringToTop(this.right);
+    this.guy.sprite.depth = 8;
+    //this.children.bringToTop(this.right);
 
     this.rich = new Richard(this);
-    this.children.bringToTop(this.right);
+    //this.children.bringToTop(this.right);
   }
 
   update() {
@@ -150,9 +162,33 @@ export default class Coffee extends ControllableScene {
       console.log("x: " + this.guy.sprite.x);
       console.log("y: " + this.guy.sprite.y);
     }
+    this.layers.forEach(this.checkWorldOrder);
+  }
+
+  checkWorldOrder = (layer) =>{
+    //console.log("checking " + laye );
+    if(this.matter.overlap(
+      this.guy.layerBox,
+      [layer]
+    )){
+      //this.children.bringToTop(this.guy.sprite);
+      if(this.guy.sprite.depth > layer.depth){
+        this.guy.sprite.depth = layer.depth - 1;
+      }
+      //this.children.bringToTop(layer);
+      console.log("layer: " + layer.depth);
+      console.log("guy: " + this.guy.sprite.depth);
+    } else {
+      if((this.guy.sprite.depth + 1) == layer.depth){
+        this.guy.sprite.depth = layer.depth + 1;
+      }
+      //this.children.bringToTop(layer);
+      //this.children.bringToTop(this.guy.sprite);
+    }
   }
 
   checkScale() {
+    /*
     if (this.guy.sprite.y > 528) {
       this.children.bringToTop(this.guy.sprite);
     } else if (this.guy.sprite.y > 500) {
@@ -167,6 +203,7 @@ export default class Coffee extends ControllableScene {
       this.children.bringToTop(this.left);
       this.children.bringToTop(this.front);
     }
+    */
   }
   checkLeave() {
     if (this.guy.sprite.x < 100 && this.guy.sprite.y > 450) {

@@ -204,6 +204,36 @@
     ]
   },
 
+  "layerBox": {
+    "type": "fromPhysicsEditor",
+    "label": "layerBox",
+    "isStatic": false,
+    "density": 0.10000000149011612,
+    "restitution": 0.5,
+    "friction": 0.10000000149011612,
+    "frictionAir": 0.009999999776482582,
+    "frictionStatic": 0.5,
+    "collisionFilter": {
+      "group": 0,
+      "category": 1,
+      "mask": 255
+    },
+    "fixtures": [
+      {
+        "label": "",
+        "isSensor": false,
+        "vertices": [
+          [
+            { "x": 5, "y": 42 },
+            { "x": 5, "y": 3000 },
+            { "x": 105, "y": 42 },
+            { "x": 105, "y": 3000 }
+          ]
+        ]
+      }
+    ]
+  },
+
   "richard": {
     "type": "fromPhysicsEditor",
     "label": "richard",
