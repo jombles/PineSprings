@@ -16,7 +16,7 @@ const config = {
     default: "matter",
     matter: {
       // This is the default value
-      debug: true,
+      debug: false,
       gravity: { y: 0 },
 
       // You can also pass in Matter.Engine config properties:

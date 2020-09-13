@@ -21,6 +21,7 @@ export default class Guy extends Character {
     this.maxY = SI["maxY"];
     this.close = SI["close"];
     this.far = SI["far"];
+    this.staticScaleMultiplier = SI["multiplier"];
 
     const objects = scene.cache.json.get("objects");
 
@@ -115,7 +116,7 @@ export default class Guy extends Character {
     //console.log(scalar);
 
     //return 28.8/(worldLoc + 12);
-    return scalar; 
+    return scalar * this.staticScaleMultiplier; 
 
 
     //console.log("Location: " + worldLoc);

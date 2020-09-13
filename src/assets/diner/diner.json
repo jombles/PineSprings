@@ -1,0 +1,134 @@
+{
+	"generator_info": "Shape definitions generated with PhysicsEditor. Visit https://www.codeandweb.com/physicseditor",
+	"dinerl1": {
+		"type": "fromPhysicsEditor",
+		"label": "dinerl1",
+		"isStatic": true,
+		"density": 0.1,
+		"restitution": 0,
+		"friction": 0.1,
+		"frictionAir": 0.01,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 1,
+			"mask": 255
+		},
+		"fixtures": [
+			{
+				"label": "",
+				"isSensor": false,
+				"vertices": [
+					[ { "x":573, "y":862 }, { "x":571, "y":791 }, { "x":17, "y":796 }, { "x":16, "y":864 } ]
+				]
+			}
+		]
+	},
+	"dinerl2": {
+		"type": "fromPhysicsEditor",
+		"label": "dinerl2",
+		"isStatic": true,
+		"density": 0.10000000149011612,
+		"restitution": 0,
+		"friction": 0.10000000149011612,
+		"frictionAir": 0.009999999776482582,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 1,
+			"mask": 255
+		},
+		"fixtures": [
+			{
+				"label": "",
+				"isSensor": false,
+				"vertices": [
+					[ { "x":710, "y":550 }, { "x":660, "y":544 }, { "x":576, "y":559 }, { "x":578, "y":572 }, { "x":628, "y":576 } ]
+				]
+			}
+		]
+	},
+	"dinerl3": {
+		"type": "fromPhysicsEditor",
+		"label": "dinerl3",
+		"isStatic": true,
+		"density": 0.10000000149011612,
+		"restitution": 0,
+		"friction": 0.10000000149011612,
+		"frictionAir": 0.009999999776482582,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 1,
+			"mask": 255
+		},
+		"fixtures": [
+			{
+				"label": "",
+				"isSensor": false,
+				"vertices": [
+					[ { "x":652, "y":503 }, { "x":671, "y":510 }, { "x":759, "y":511 }, { "x":706, "y":498 }, { "x":671, "y":496 } ]
+				]
+			}
+		]
+	},
+	"dinerl4": {
+		"type": "fromPhysicsEditor",
+		"label": "dinerl4",
+		"isStatic": true,
+		"density": 0.10000000149011612,
+		"restitution": 0,
+		"friction": 0.10000000149011612,
+		"frictionAir": 0.009999999776482582,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 1,
+			"mask": 255
+		},
+		"fixtures": [
+			{
+				"label": "",
+				"isSensor": false,
+				"vertices": [
+					[ { "x":846, "y":514 }, { "x":933, "y":624 }, { "x":1020, "y":724 }, { "x":1138, "y":652 }, { "x":954, "y":512 } ],
+					[ { "x":1284, "y":650 }, { "x":1138, "y":652 }, { "x":1020, "y":724 }, { "x":1284, "y":724 } ]
+				]
+			}
+		]
+	},
+	"dinerBackBody": {
+		"type": "fromPhysicsEditor",
+		"label": "inside-diner-color",
+		"isStatic": true,
+		"density": 0.10000000149011612,
+		"restitution": 0,
+		"friction": 0.10000000149011612,
+		"frictionAir": 0.009999999776482582,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 1,
+			"mask": 255
+		},
+		"fixtures": [
+			{
+				"label": "",
+				"isSensor": false,
+				"vertices": [
+					[ { "x":395, "y":561 }, { "x":401, "y":553 }, { "x":326, "y":560 }, { "x":373, "y":564 } ],
+					[ { "x":296, "y":574 }, { "x":326, "y":560 }, { "x":257, "y":572 } ],
+					[ { "x":1032, "y":679 }, { "x":1032, "y":725 }, { "x":1038.6363525390625, "y":788.1818161010742 }, { "x":1255, "y":686 } ],
+					[ { "x":1191, "y":564 }, { "x":1284, "y":564 }, { "x":1019, "y":476 } ],
+					[ { "x":457, "y":555 }, { "x":468, "y":550 }, { "x":617, "y":472 }, { "x":401, "y":553 } ],
+					[ { "x":588, "y":402 }, { "x":269, "y":465 }, { "x":1168, "y":416 } ],
+					[ { "x":236, "y":577 }, { "x":257, "y":572 }, { "x":187, "y":576 } ],
+					[ { "x":401, "y":553 }, { "x":617, "y":472 }, { "x":326, "y":560 } ],
+					[ { "x":257, "y":572 }, { "x":326, "y":560 }, { "x":617, "y":472 }, { "x":187, "y":576 } ],
+					[ { "x":780, "y":480 }, { "x":1019, "y":476 }, { "x":617, "y":472 } ],
+					[ { "x":187, "y":576 }, { "x":617, "y":472 }, { "x":164, "y":581 } ]
+				]
+			}
+		]
+	}
+}
