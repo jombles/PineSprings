@@ -38,6 +38,14 @@ export default class Guy extends Character {
       locY + this.sprite.centerOfMass.y
     );
 
+    this.layerBox = scene.matter.add.sprite(0, 0, "empty", 0, {
+      shape: objects.layerBox
+    });
+    this.layerBox.x = this.sprite.x; 
+    this.layerBox.y = this.sprite.y + (1450 * this.sprite.scale);
+    this.layerBox.setCollisionGroup(4)
+    this.layerBox.setCollidesWith(32)
+
     scene.anims.create({
       key: "walk",
       frames: scene.anims.generateFrameNumbers("guy", { start: 2, end: 9 }),
@@ -132,8 +140,10 @@ export default class Guy extends Character {
     var scaleVal = this.calcScale();
     if (this.sprite.scale < 0) {
       this.sprite.setScale(-scaleVal, scaleVal);
+      this.layerBox.setScale(scaleVal, scaleVal);
     } else {
       this.sprite.setScale(scaleVal, scaleVal);
+      this.layerBox.setScale(scaleVal, scaleVal);
     }
     if (input.left.isDown) {
       this.swingDone = false;
@@ -152,7 +162,7 @@ export default class Guy extends Character {
       this.watchLook = false;
       this.sprite.anims.play("walk", true);
       this.sprite.setVelocityX(3.7 * Math.pow(scaleVal, 0.9));
-      console.log(3.6 * Math.pow(scaleVal, 1.1));
+      //console.log(3.6 * Math.pow(scaleVal, 1.1));
 
       if (!input.left.isDown) {
         this.sprite.flipX = false;
@@ -190,6 +200,8 @@ export default class Guy extends Character {
     if (input.left.isUp && input.right.isUp) {
       this.sprite.setVelocityX(0);
     }
+    this.layerBox.x = this.sprite.x; 
+    this.layerBox.y = this.sprite.y + (1480 * this.sprite.scale);
     return scaleChange;
   }
 }
