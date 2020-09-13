@@ -22,6 +22,7 @@ const scaleInfo = {
   "maxY":830,
   "close":34,
   "far":99,
+  "multiplier":1,
 }
 const debug = true;
 
