@@ -262,5 +262,35 @@
         ]
       }
     ]
+  },
+
+  "peggy": {
+    "type": "fromPhysicsEditor",
+    "label": "peggy",
+    "isStatic": true,
+    "density": 0.10000000149011612,
+    "restitution": 0.5,
+    "friction": 0.10000000149011612,
+    "frictionAir": 0.009999999776482582,
+    "frictionStatic": 0.5,
+    "collisionFilter": {
+      "group": -1,
+      "category": 2,
+      "mask": 64
+    },
+    "fixtures": [
+      {
+        "label": "",
+        "isSensor": false,
+        "vertices": [
+          [
+            { "x": -270, "y": -200 },
+            { "x": -270, "y": 200 },
+            { "x": 175, "y": -200 },
+            { "x": 175, "y": 200 }
+          ]
+        ]
+      }
+    ]
   }
 }

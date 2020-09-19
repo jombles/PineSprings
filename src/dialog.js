@@ -118,6 +118,15 @@ const createDialog = (scene, config) => {
       button.getElement("background").setStrokeStyle();
     });
 
+    console.log(dialog);
+    dialog.children.forEach(function(child){
+      if(child.children){
+        child.children.forEach(function(el){
+          el.depth = 30;
+        });
+      }
+      child.depth = 30;
+    });
   return dialog;
 };
 
