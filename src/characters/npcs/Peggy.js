@@ -22,8 +22,8 @@ export default class Peggy extends Character {
     this.sprite.body.inertia = Infinity;
     scene.anims.create({
       key: "peggyStand",
-      frames: scene.anims.generateFrameNumbers("peggystand", { frames:[0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,2,2,3,3,2,2,0,0,1,1,1,1,1,1,1,1] }),
-      frameRate: 6,
+      frames: scene.anims.generateFrameNumbers("peggystand", { frames:[0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,2,2,3,3,2,2,0,0,0,1,1,1,1,1,1,1,1,1,1,1] }),
+      frameRate: 5,
       repeat: -1
     });
     this.sprite.anims.play("peggyStand", false);
