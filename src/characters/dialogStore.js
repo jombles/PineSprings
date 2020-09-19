@@ -10,5 +10,11 @@ export default {
         ["I'm so lonely.", "..."],
         ["I have a gun at my house. Please shoot me in the head. Please.", "..."]
       ]
-    } 
+    },
+    "Peggy": {
+      dialogue: [
+          ["Welcome to The Quiet Town Cafe.", "..."],
+          ["Our coffee is hot.", "..."]
+        ]
+      } 
 }

@@ -1,5 +1,7 @@
 import ControllableScene from './Controllable';
 import SceneKeys from './sceneKeys';
+import Peggy from "../characters/npcs/Peggy";
+import { handleCollision } from "../dialog";
 //import Richard from "./characters/npcs/Richard";
 const world = require("../assets/world.json");
 const innJ = require("../assets/inn.json");
@@ -22,7 +24,7 @@ import Guy from '../characters/Guy';
 //const leftC = require("./assets/outside-coffee-shop-left-rail.png");
 //const rightC = require("./assets/outside-coffee-shop-right-rail.png");
 const guyImg = require("../assets/main-guy-large.png");
-const richardImg = require("../assets/richard-large.png");
+const peggyImg = require("../assets/peggy/peggystand.png");
 const minY = 400;
 const diffY = 777 - minY;
 const scalingDif = 4.5;
@@ -53,6 +55,7 @@ export default class Diner extends ControllableScene {
 	super.preload();
     this.dialog = false;
     this.guy = null;
+    this.peggy = null;
     this.characters = {};
     this.load.image("backDiner", dinerC);
     this.load.image("backDinerOff", dinerOffC);
@@ -81,7 +84,7 @@ export default class Diner extends ControllableScene {
       frameWidth: 125,
       frameHeight: 225
     });
-    this.load.spritesheet("richard", richardImg, {
+    this.load.spritesheet("peggystand", peggyImg, {
       frameWidth: 125,
       frameHeight: 225
     });
@@ -134,6 +137,7 @@ export default class Diner extends ControllableScene {
     this.guy = new Guy(this, this.inX, this.inY, scaleInfo);
     this.guy.calcScale();
     this.children.bringToTop(this.guy.sprite);
+    this.peggy = new Peggy(this);
 
 
     this.layer1 = this.matter.add.image(0, 0, "dinerl1", null, {
@@ -195,6 +199,8 @@ export default class Diner extends ControllableScene {
     this.handleDoorHighlight(input);
     this.handleLightHighlight(input);
     
+    handleCollision(this, this.peggy);
+
     if(debug){
         console.log("x: " + this.guy.sprite.x);
         console.log("y: " + this.guy.sprite.y);
