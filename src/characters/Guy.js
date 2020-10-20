@@ -1,4 +1,5 @@
 import Character from "./Character";
+import QuestHandler from "../quests/QuestHandler";
 
 
 const minY = 400;
@@ -14,6 +15,8 @@ export default class Guy extends Character {
   constructor(scene, locX, locY, SI) {
     super("Guy");
     this.completedQuests = {};
+    this.activeQuests = window.questHandler.getCurrentQuests();
+    console.log(this.activeQuests);
     this.swingDone = false;
     this.watchLook = false;
 

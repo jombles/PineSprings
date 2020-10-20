@@ -4,6 +4,9 @@ import Coffee from "./scenes/Coffee.js";
 import Hotel from "./scenes/Hotel.js";
 import Diner from "./scenes/Diner.js";
 import UI from './scenes/UI';
+import QuestHandler from './quests/QuestHandler';
+
+window.questHandler = new QuestHandler();
 
 const config = {
   type: Phaser.CANVAS,

@@ -1,6 +1,7 @@
 export default class Quest {
   constructor(id) {
     this.id = id;
+    this.complete = false;
   }
 
   getQuestPrereqs() {

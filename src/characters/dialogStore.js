@@ -1,6 +1,6 @@
 export default {
     "Richard": {
-    dialogue: [
+      "default": [
         ["New in town, huh?", "..."],
         ["You should leave now. There's nothing here for you.", "..."],
         ["The weather's taken a turn. Get back on the train. Go home.", "..."],
@@ -12,9 +12,9 @@ export default {
       ]
     },
     "Peggy": {
-      dialogue: [
-          ["Welcome to The Quiet Town Cafe.", "..."],
-          ["Our coffee is hot.", "..."]
-        ]
-      } 
+      "default": [
+        ["Welcome to The Quiet Town Cafe.", "..."],
+        ["Our coffee is hot.", "..."]
+      ]
+    },
 }
