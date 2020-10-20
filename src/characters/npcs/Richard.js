@@ -32,28 +32,45 @@ export default class Richard extends Character {
     this.sprite.anims.play("chill", true);
   }
 
-  getCurrentDialogue(scene) {
+
+  getCurrentDialogue(scene, quests) {
 		// TODO: make this dialogue dependent on game state.
-		const dialogue = this.getDefaultDialogue()
+    const dialogue = this.getDefaultDialogue();
 		return this.createDialogue(scene, dialogue, ["..."], (type, index, text) => {
-      if(this.dialogIndex >= this.maxDialog){
-        dismissDialog(scene);
-        return; 
+      var hasQuestDialog = false;
+      console.log("quests:" + quests);
+      var d = '';
+      quests.forEach((quest) => {
+        var step = quest.getCurrentStep();
+        if(step.type == "dialogue" && step.npc == this.name ){
+          d = step.progressStep();
+          hasQuestDialog = true;
+        }
+      });
+      if(!hasQuestDialog){
+        //console.log(this.dialogIndex);
+        //console.log(this.dialogIndex);
+        d = scene.getDialogue(this.name,this.dialogIndex);
+        this.dialogIndex += 1;
       }
-      console.log(this.dialogIndex);
-      console.log(this.dialogIndex);
-      var d = scene.getDialogue(this.name,this.dialogIndex);
-      this.dialogIndex += 1;
-      console.log("dialogue: " + d);
-      var width1 = scene.dialog.getElement('content').children[2].frame.cutWidth;
-			scene.dialog.getElement('content').setText(d[0]);
-      scene.dialog.getElement('actions')[0].setText(d[1]);
-      console.log(scene.dialog.getElement('content').children);
-      var width2 = scene.dialog.getElement('content').children[2].frame.cutWidth;
-      scene.dialog.getElement('content').children[2].x -= (width2 - width1)/2;
-      scene.dialog.getElement('content').children[0].width = scene.dialog.getElement('content').children[2].frame.cutWidth + 20;
-		} 
-	);
+        if(this.dialogIndex >= this.maxDialog){
+          dismissDialog(scene);
+          return; 
+        }
+        //console.log("dialogue: " + d);
+        var width1 = scene.dialog.getElement('content').children[2].frame.cutWidth;
+        scene.dialog.getElement('content').setText(d[0]);
+        scene.dialog.getElement('actions')[0].setText(d[1]);
+        //console.log(scene.dialog.getElement('content').children);
+        var width2 = scene.dialog.getElement('content').children[2].frame.cutWidth;
+        scene.dialog.getElement('content').children[2].x -= (width2 - width1)/2;
+        scene.dialog.getElement('content').children[0].width = scene.dialog.getElement('content').children[2].frame.cutWidth + 20;
+      } 
+	  );
+  }
+
+  getDialogue(){
+    
   }
 
   getDefaultDialogue() {

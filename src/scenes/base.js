@@ -16,17 +16,17 @@ export default class BaseScene extends Phaser.Scene {
 
 
 	getDialogue(npc,index) {
-    //var index = dialogSheet[npc].index || 0;
-    var dialogue = dialogSheet[npc].dialogue;
-    //dialogSheet[npc].index++;
-    if(index < dialogue.length){
-        return dialogue[index];
-    } else {
-        return false;
-	}
-}
+        //var index = dialogSheet[npc].index || 0;
+        var dialogue = dialogSheet[npc]["default"];
+        //dialogSheet[npc].index++;
+        if(index < dialogue.length){
+            return dialogue[index];
+        } else {
+            return false;
+        }
+    }
 
-maxDialog(npc){
-	return dialogSheet[npc].dialogue.length;
-}
+    maxDialog(npc){
+        return dialogSheet[npc]["default"].length;
+    }
 }

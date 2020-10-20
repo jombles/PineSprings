@@ -136,7 +136,7 @@ const handleCollision = (scene, npc) => {
   };
 
   const onCollideCallback = () => {
-    scene.dialog = npc.getCurrentDialogue(scene);
+    scene.dialog = npc.getCurrentDialogue(scene, scene.guy.activeQuests);
   };
 
   let checked = false;
