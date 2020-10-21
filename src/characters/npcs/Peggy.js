@@ -29,8 +29,4 @@ export default class Peggy extends Character {
     this.sprite.anims.play("peggyStand", false);
   }
 
-
-  getDefaultDialogue() {
-    return "Welcome to The Quiet Town Cafe.";
-  }
 }

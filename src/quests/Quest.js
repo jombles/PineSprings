@@ -7,4 +7,8 @@ export default class Quest {
   getQuestPrereqs() {
     throw new Error("must implement getQuestPrereqs");
   }
+
+  getCurrentStep() {
+    throw new Error("must implement getCurrentStep");
+  }
 }
