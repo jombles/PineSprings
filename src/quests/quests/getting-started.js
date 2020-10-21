@@ -1,5 +1,6 @@
 import Quest from "../Quest";
 import DialogStep from "../DialogStep";
+import DialogTree from "../DialogTree";
 
 export default class GettingStarted extends Quest {
   constructor(handler) {
@@ -8,25 +9,39 @@ export default class GettingStarted extends Quest {
     this.handler = handler;
     this.steps = [
       new DialogStep(
-        [
-          ["Hey. Go inside, talk to Peggy.", "..."]
-        ]
-        ,"Richard", this),
+        new DialogTree(
+          [
+            ["Hey. Go inside, talk to Peggy. Hey. Go inside, talk to Peggy. Hey. Go inside, talk to Peggy. Hey. Go inside, talk to Peggy. ", "..."]
+          ], "Richard", 2
+        ),
+        this),
       new DialogStep(
-        [
-          ["Ugh, Richard. I don't want to see him.", "..."],
-          ["Tell him to leave", "..."]
-        ],"Peggy", this),
+        new DialogTree(
+          [
+            ["Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him. Ugh, Richard. I don't want to see him.", "..."],
+            ["Tell him to leave", "..."]
+          ], "Peggy", 2
+        ),
+        this),
       new DialogStep(
-        [
-          ["She said what?", "..."],
-          ["Damn it. Whatever.", "..."]
-        ]
-        ,"Richard", this)
+        new DialogTree(
+          [
+            ["She said what?", "..."],
+            ["Damn it. Whatever.", "..."]
+          ],"Richard",2
+        ),
+        this)
     ]
   }
 
   getCurrentStep(){
+    var step = this.steps[this.stepIndex];
+    if(step.checkStepSuccess()){
+      this.nextStep();
+    }
+    if(!this.steps[this.stepIndex]){
+      return false;
+    }
     return this.steps[this.stepIndex];
   }
 

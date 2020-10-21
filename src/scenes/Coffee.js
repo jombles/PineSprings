@@ -96,7 +96,7 @@ export default class Coffee extends ControllableScene {
       // position: { x: 0, y: 0 }
     });
     this.back.setPosition(this.back.displayOriginX, this.back.displayOriginY);
-
+    this.sound.pauseOnBlur = false;
     //this.back.setScale(800 / this.back.width, 800 / this.back.width);
 
     // console.log(this.back.width * this.back.centerOfMass.x);

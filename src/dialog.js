@@ -92,6 +92,7 @@ const getDialogConfig = (scene, { content, title, choices, actions }) => {
 };
 
 const createDialog = (scene, config) => {
+  console.log(config.actions);
   const dialogConfig = getDialogConfig(scene, config);
   var dialog = scene.rexUI.add
     .dialog(dialogConfig)
@@ -137,6 +138,17 @@ const handleCollision = (scene, npc) => {
 
   const onCollideCallback = () => {
     scene.dialog = npc.getCurrentDialogue(scene, scene.guy.activeQuests);
+    var width1 = scene.dialog.getElement('content').children[2].frame.cutWidth;
+    var text = scene.dialog.getElement('content').children[2]._text;
+    scene.dialog.getElement('content').children[2].lineSpacing = 2.0;
+    console.log(scene.dialog.getElement('content').children[2]._text);
+        scene.dialog.getElement('content').setText(text);
+        console.log(scene.dialog.getElement('content').children);
+        var width2 = scene.dialog.getElement('content').children[2].frame.cutWidth;
+        scene.dialog.getElement('content').children[2].x -= (width2 - width1)/2;
+        scene.dialog.getElement('content').children[0].width = scene.dialog.getElement('content').children[2].frame.cutWidth + 20;
+      
+    scene.dialog.getElement('content').children[2].fontStyle = "line-height: 2;";
   };
 
   let checked = false;
