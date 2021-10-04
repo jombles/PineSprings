@@ -76,12 +76,11 @@ export default class Coffee extends ControllableScene {
       frameHeight: 225
     });
     this.load.json("objects", world);
-    this.load.scenePlugin(
-      "rexuiplugin",
-      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js",
-      "rexUI",
-      "rexUI"
-    );
+    this.load.scenePlugin({
+      key: 'rexuiplugin',
+      url: "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js",
+      sceneKey: 'rexUI'
+  });
   }
 
   create() {

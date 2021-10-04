@@ -2,15 +2,6 @@ import Character from "./Character";
 import QuestHandler from "../quests/QuestHandler";
 
 
-const minY = 400;
-const diffY = 777 - minY;
-const scalingDif = 4.5;
-const textureScale = 0.35;
-const baseScale = 0.3;
-const ySpeed = 0.5;
-const speedScale = 2.6;
-
-
 export default class Guy extends Character {
   constructor(scene, locX, locY, SI) {
     super("Guy");
@@ -162,6 +153,7 @@ export default class Guy extends Character {
       }
     }
     if (input.right.isDown) {
+      console.log("rreee");
       this.swingDone = false;
       this.watchLook = false;
       this.sprite.anims.play("walk", true);
