@@ -1,4 +1,5 @@
 const createLabel = (scene, text) => {
+  console.log(scene.rexUI);
   return scene.rexUI.add.label({
     width: 40, // Minimum width of round-rectangle
     height: 40, // Minimum height of round-rectangle
